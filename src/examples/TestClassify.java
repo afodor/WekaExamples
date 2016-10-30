@@ -10,7 +10,7 @@ import weka.classifiers.trees.RandomForest;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 
-public class TestRead
+public class TestClassify
 {
 	public static void main(String[] args) throws Exception
 	{
