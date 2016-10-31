@@ -21,7 +21,7 @@ public class TestClassify
 	public static void main(String[] args) throws Exception
 	{
 		Random random = new Random(0);
-		int numPermutations = 20;
+		int numPermutations = 50;
 
 		for( int x=1 ; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
 		{
@@ -44,6 +44,8 @@ public class TestClassify
 			
 			Instances trainData = DataSource.read(ad2.getAbsolutePath());
 			Instances testData = DataSource.read(adenomas.getAbsolutePath());
+			trainData.setClassIndex(trainData.numAttributes() -1);
+			testData.setClassIndex(testData.numAttributes() -1);
 			
 			List<Double> crossROC = 
 						getRocForTrainingToTest(trainData, testData, random, numPermutations);
