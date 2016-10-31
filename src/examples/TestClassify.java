@@ -12,6 +12,7 @@ import utils.ConfigReader;
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.trees.RandomForest;
+import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 
@@ -19,10 +20,12 @@ public class TestClassify
 {
 	public static void main(String[] args) throws Exception
 	{
-		int numPermutations = 4;
+		Random random = new Random(0);
+		int numPermutations = 1;
 
 		for( int x=1 ; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
 		{
+			
 			System.out.println(NewRDPParserFileLine.TAXA_ARRAY[x]);
 			BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				ConfigReader.getAdenomasWekaDir() + File.separator + 
@@ -42,9 +45,30 @@ public class TestClassify
 			for(int y=0;y < firstARoc.size(); y++)
 				writer.write(firstARoc.get(y) + "\t" + secondROC.get(y) + "\n");
 			
+			Instances trainData = DataSource.read(ad2.getAbsolutePath());
+			Instances testData = DataSource.read(adenomas.getAbsolutePath());
+			
+			getRocForTrainingToTest(trainData, testData, random);
+			
 			writer.flush();  writer.close();
 		}
 		
+	}
+	
+	public static List<Double> getRocForTrainingToTest(Instances trainingData, Instances testData,
+				Random random)
+	{
+		Instances halfTrain = new Instances(trainingData, trainingData.size() / 2 );
+		
+		for(Instance i : trainingData)
+			if( random.nextFloat() <= 0.5)
+				halfTrain.add(i);
+		
+		System.out.println(halfTrain.size() + " " + trainingData.size());
+		
+		AbstractClassifier rf = new RandomForest();
+		
+		return null;
 	}
 	
 	public static List<Double> getROCAreasForOneFile( File inFile, int numPermutations ) throws Exception
@@ -62,7 +86,7 @@ public class TestClassify
 			//rf.buildClassifier(data);
 			ev.crossValidateModel(rf, data, 10, random);
 			//System.out.println(ev.toSummaryString("\nResults\n\n", false));
-			System.out.println(x + " " + ev.areaUnderROC(0));
+			System.out.println(x + " " + ev.areaUnderROC(0) + " " + ev.pctCorrect());
 			rocAreas.add(ev.areaUnderPRC(0));
 		}
 		
