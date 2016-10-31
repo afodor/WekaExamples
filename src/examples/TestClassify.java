@@ -1,5 +1,5 @@
 package examples;
-import java.io.BufferedReader;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -21,7 +21,7 @@ public class TestClassify
 	public static void main(String[] args) throws Exception
 	{
 		Random random = new Random(0);
-		int numPermutations = 1;
+		int numPermutations = 20;
 
 		for( int x=1 ; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
 		{
@@ -31,24 +31,25 @@ public class TestClassify
 				ConfigReader.getAdenomasWekaDir() + File.separator + 
 						 NewRDPParserFileLine.TAXA_ARRAY[x] +"_Adenomas.txt" )));
 			
-			writer.write("ad1\tad2\n");
+			writer.write("ad1\tad2\tcross\n");
 			
 			File adenomas = new File("C:\\adenomasRelease\\spreadsheets\\pivoted_" + 
 					NewRDPParserFileLine.TAXA_ARRAY[x] + 	"LogNormalWithMetadataBigSpace.arff");
-			List<Double> firstARoc = getROCAreasForOneFile(adenomas, numPermutations);
+			List<Double> firstARoc = getROCAreasForOneFile(adenomas, numPermutations,random);
 			
 			File ad2 = new File("C:\\tope_Sep_2015\\spreadsheets\\" + 
 					NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumnsLogNormalPlusMetadataBigSpace.arff");
 			
-			List<Double> secondROC = getROCAreasForOneFile(ad2, numPermutations);;
-			
-			for(int y=0;y < firstARoc.size(); y++)
-				writer.write(firstARoc.get(y) + "\t" + secondROC.get(y) + "\n");
+			List<Double> secondROC = getROCAreasForOneFile(ad2, numPermutations,random);;
 			
 			Instances trainData = DataSource.read(ad2.getAbsolutePath());
 			Instances testData = DataSource.read(adenomas.getAbsolutePath());
 			
-			getRocForTrainingToTest(trainData, testData, random);
+			List<Double> crossROC = 
+						getRocForTrainingToTest(trainData, testData, random, numPermutations);
+			
+			for(int y=0;y < firstARoc.size(); y++)
+				writer.write(firstARoc.get(y) + "\t" + secondROC.get(y) + "\t" + crossROC.get(y) + "\n");
 			
 			writer.flush();  writer.close();
 		}
@@ -56,24 +57,36 @@ public class TestClassify
 	}
 	
 	public static List<Double> getRocForTrainingToTest(Instances trainingData, Instances testData,
-				Random random)
+				Random random, int numIterations) throws Exception
 	{
-		Instances halfTrain = new Instances(trainingData, trainingData.size() / 2 );
+
+		List<Double> rocAreas = new ArrayList<Double>();
 		
-		for(Instance i : trainingData)
-			if( random.nextFloat() <= 0.5)
-				halfTrain.add(i);
+		for( int x=0; x < numIterations; x++)
+		{
+
+			Instances halfTrain = new Instances(trainingData, trainingData.size() / 2 );
+			
+			for(Instance i : trainingData)
+				if( random.nextFloat() <= 0.5)
+					halfTrain.add(i);
+			
+			System.out.println(halfTrain.size() + " " + trainingData.size());
+			
+			AbstractClassifier rf = new RandomForest();
+			rf.buildClassifier(halfTrain);
+			Evaluation ev = new Evaluation(halfTrain);
+			ev.evaluateModel(rf, testData);
+			System.out.println("cross " + x + " " + ev.areaUnderROC(0) + " " + ev.pctCorrect());
+			rocAreas.add(ev.areaUnderPRC(0));
+		}
 		
-		System.out.println(halfTrain.size() + " " + trainingData.size());
-		
-		AbstractClassifier rf = new RandomForest();
-		
-		return null;
+		return rocAreas;
 	}
 	
-	public static List<Double> getROCAreasForOneFile( File inFile, int numPermutations ) throws Exception
+	public static List<Double> getROCAreasForOneFile( File inFile, int numPermutations, Random random ) 
+				throws Exception
 	{
-		Random random = new Random(0);
 		List<Double> rocAreas = new ArrayList<Double>();
 		
 		for( int x=0; x< numPermutations; x++)
