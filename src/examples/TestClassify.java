@@ -80,7 +80,7 @@ public class TestClassify
 			Evaluation ev = new Evaluation(halfTrain);
 			ev.evaluateModel(rf, testData);
 			System.out.println("cross " + x + " " + ev.areaUnderROC(0) + " " + ev.pctCorrect());
-			rocAreas.add(ev.areaUnderPRC(0));
+			rocAreas.add(ev.pctCorrect());
 		}
 		
 		return rocAreas;
@@ -102,7 +102,7 @@ public class TestClassify
 			ev.crossValidateModel(rf, data, 10, random);
 			//System.out.println(ev.toSummaryString("\nResults\n\n", false));
 			System.out.println(x + " " + ev.areaUnderROC(0) + " " + ev.pctCorrect());
-			rocAreas.add(ev.areaUnderPRC(0));
+			rocAreas.add(ev.pctCorrect());
 		}
 		
 		return rocAreas;
