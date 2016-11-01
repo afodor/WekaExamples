@@ -35,12 +35,12 @@ public class TestClassify
 			
 			File adenomas = new File("C:\\adenomasRelease\\spreadsheets\\pivoted_" + 
 					NewRDPParserFileLine.TAXA_ARRAY[x] + 	"LogNormalWithMetadataBigSpace.arff");
-			List<Double> firstARoc = getROCAreasForOneFile(adenomas, numPermutations,random);
+			List<Double> firstARoc = getPercentCorrectForOneFile(adenomas, numPermutations,random);
 			
 			File ad2 = new File("C:\\tope_Sep_2015\\spreadsheets\\" + 
 					NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumnsLogNormalPlusMetadataBigSpace.arff");
 			
-			List<Double> secondROC = getROCAreasForOneFile(ad2, numPermutations,random);;
+			List<Double> secondROC = getPercentCorrectForOneFile(ad2, numPermutations,random);;
 			
 			Instances trainData = DataSource.read(ad2.getAbsolutePath());
 			Instances testData = DataSource.read(adenomas.getAbsolutePath());
@@ -86,10 +86,10 @@ public class TestClassify
 		return rocAreas;
 	}
 	
-	public static List<Double> getROCAreasForOneFile( File inFile, int numPermutations, Random random ) 
+	public static List<Double> getPercentCorrectForOneFile( File inFile, int numPermutations, Random random ) 
 				throws Exception
 	{
-		List<Double> rocAreas = new ArrayList<Double>();
+		List<Double> percentCorrect = new ArrayList<Double>();
 		
 		for( int x=0; x< numPermutations; x++)
 		{
@@ -101,11 +101,11 @@ public class TestClassify
 			//rf.buildClassifier(data);
 			ev.crossValidateModel(rf, data, 10, random);
 			//System.out.println(ev.toSummaryString("\nResults\n\n", false));
-			System.out.println(x + " " + ev.areaUnderROC(0) + " " + ev.pctCorrect());
-			rocAreas.add(ev.pctCorrect());
+			//System.out.println(x + " " + ev.areaUnderROC(0) + " " + ev.pctCorrect());
+			percentCorrect.add(ev.pctCorrect());
 		}
 		
-		return rocAreas;
+		return percentCorrect;
 		
 	}
 }
