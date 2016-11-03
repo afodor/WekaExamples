@@ -65,12 +65,12 @@ public class TestClassify
 	public static void main(String[] args) throws Exception
 	{
 		Random random = new Random(0);
-		int numPermutations = 50;
+		int numPermutations = 5;
 
 		for( int x=1 ; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
 		{
 			
-			//System.out.println(NewRDPParserFileLine.TAXA_ARRAY[x]);
+			System.out.println(NewRDPParserFileLine.TAXA_ARRAY[x]);
 			File adenomas = new File("C:\\adenomasRelease\\spreadsheets\\pivoted_" + 
 					NewRDPParserFileLine.TAXA_ARRAY[x] + 	"LogNormalWithMetadataBigSpace.arff");
 
@@ -79,7 +79,8 @@ public class TestClassify
 			
 			Instances testData = DataSource.read(adenomas.getAbsolutePath());
 
-			getPercentCorrectFromScrambles(adenomas, testData, random, numPermutations);
+			List<Double> percentCorrect =
+			getPercentCorrectFromScrambles(ad2, testData, random, numPermutations,false);
 		}
 	}
 
@@ -112,6 +113,9 @@ public class TestClassify
 		{
 			if( scramble)
 				scrambeLastColumn(trainData, random);
+			
+			trainData.setClassIndex(trainData.numAttributes() -1);
+			testData.setClassIndex(testData.numAttributes() -1);
 			
 			AbstractClassifier rf = new RandomForest();
 			rf.buildClassifier(trainData);
