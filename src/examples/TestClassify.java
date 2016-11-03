@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -12,12 +13,14 @@ import utils.ConfigReader;
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.trees.RandomForest;
+import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 
 public class TestClassify
 {
+	/*
 	public static void main(String[] args) throws Exception
 	{
 		Random random = new Random(0);
@@ -56,6 +59,69 @@ public class TestClassify
 			writer.flush();  writer.close();
 		}
 		
+	}
+	*/
+	
+	public static void main(String[] args) throws Exception
+	{
+		Random random = new Random(0);
+		int numPermutations = 50;
+
+		for( int x=1 ; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
+		{
+			
+			//System.out.println(NewRDPParserFileLine.TAXA_ARRAY[x]);
+			File adenomas = new File("C:\\adenomasRelease\\spreadsheets\\pivoted_" + 
+					NewRDPParserFileLine.TAXA_ARRAY[x] + 	"LogNormalWithMetadataBigSpace.arff");
+
+			File ad2 = new File("C:\\tope_Sep_2015\\spreadsheets\\" + 
+					NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumnsLogNormalPlusMetadataBigSpace.arff");
+			
+			Instances testData = DataSource.read(adenomas.getAbsolutePath());
+
+			getPercentCorrectFromScrambles(adenomas, testData, random, numPermutations);
+		}
+	}
+
+	
+	private static void scrambeLastColumn( Instances instances, Random random )
+	{
+		List<Double> list = new ArrayList<Double>();
+		
+		for(Instance i : instances)
+			list.add(i.value(i.numAttributes()-1));
+		
+		Collections.shuffle(list,random);
+		
+		for( int x=0; x < instances.size(); x++)
+		{
+			Instance i = instances.get(x);
+			i.setValue(i.numAttributes()-1, list.get(x));
+		}
+	}
+	
+	public static List<Double> getPercentCorrectFromScrambles( File trainingDataFile, 
+				Instances testData, Random random, int numPermutations,
+							boolean scramble) throws Exception
+	{
+		System.out.println("In scramble");
+		List<Double> aList = new ArrayList<Double>();
+		Instances trainData = DataSource.read(trainingDataFile.getAbsolutePath());
+		
+		for( int x=0; x < numPermutations; x++)
+		{
+			if( scramble)
+				scrambeLastColumn(trainData, random);
+			
+			AbstractClassifier rf = new RandomForest();
+			rf.buildClassifier(trainData);
+			Evaluation ev = new Evaluation(trainData);
+			ev.evaluateModel(rf, testData);
+			System.out.println("cross " + x + " " + ev.areaUnderROC(0) + " " + ev.pctCorrect());
+			aList.add(ev.pctCorrect());
+		}
+		
+		return aList;
 	}
 	
 	public static List<Double> getRocForTrainingToTest(Instances trainingData, Instances testData,
