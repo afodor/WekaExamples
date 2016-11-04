@@ -65,10 +65,15 @@ public class TestClassify
 	public static void main(String[] args) throws Exception
 	{
 		Random random = new Random(0);
-		int numPermutations = 5;
+		int numPermutations = 1000;
 
 		for( int x=1 ; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
 		{
+			BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+					ConfigReader.getAdenomasWekaDir() + File.separator + 
+						"adenomasShuffled" + NewRDPParserFileLine.TAXA_ARRAY[x] + ".txt")));
+			
+			writer.write("type\tvalue\n");
 			
 			System.out.println(NewRDPParserFileLine.TAXA_ARRAY[x]);
 			File adenomas = new File("C:\\adenomasRelease\\spreadsheets\\pivoted_" + 
@@ -80,7 +85,18 @@ public class TestClassify
 			Instances testData = DataSource.read(adenomas.getAbsolutePath());
 
 			List<Double> percentCorrect =
-			getPercentCorrectFromScrambles(ad2, testData, random, numPermutations,false);
+			getPercentCorrectFromScrambles(ad2, testData, random, 1,false);
+			
+			writer.write("true\t" + percentCorrect.get(0) + "\n");
+			
+			percentCorrect =
+					getPercentCorrectFromScrambles(ad2, testData, random, numPermutations,true);
+			
+			for( Double d : percentCorrect)
+				writer.write("shuffle\t" + d + "\n");
+					
+			writer.flush(); writer.close();
+			
 		}
 	}
 
@@ -121,6 +137,7 @@ public class TestClassify
 			rf.buildClassifier(trainData);
 			Evaluation ev = new Evaluation(trainData);
 			ev.evaluateModel(rf, testData);
+			if( x % 20 ==0)
 			System.out.println("cross " + x + " " + ev.areaUnderROC(0) + " " + ev.pctCorrect());
 			aList.add(ev.pctCorrect());
 		}

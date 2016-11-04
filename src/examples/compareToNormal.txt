@@ -1,0 +1,18 @@
+rm(list=ls())
+
+setwd("C:\\adenomasWekaDir")
+
+taxa <- c("phylum", "class", "order", "family", "genus")
+#taxa <- c("phylum")
+
+par(mfrow=c(3,2))
+
+for( t in taxa) 
+{
+	 inFileName <- paste( "adenomasShuffled", t,".txt", sep="")
+	 myT <- read.table(inFileName, sep="\t", header=TRUE)
+	 shuffles <- myT[1:nrow(myT), ]$value
+	 hist(shuffles,breaks=20,main=t)
+	 points(52,1,col="RED",cex=1.1,pch=19)
+	 
+}
