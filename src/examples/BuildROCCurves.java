@@ -1,12 +1,17 @@
 package examples;
 
 import java.awt.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.*;
 import weka.core.*;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.classifiers.*;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.evaluation.Evaluation;
+import weka.classifiers.evaluation.NominalPrediction;
+import weka.classifiers.evaluation.Prediction;
 import weka.classifiers.evaluation.ThresholdCurve;
 import weka.classifiers.trees.RandomForest;
 import weka.gui.visualize.*;
@@ -40,6 +45,20 @@ public class BuildROCCurves{
     ThresholdCurve tc = new ThresholdCurve();
     int classIndex = 0;
     Instances result = tc.getCurve(eval.predictions(), classIndex);
+    
+    BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+    		"c:\\temp\\temp.txt")));
+    
+    writer.write("distribution\tweight\tactual\tpredicted\n");
+    
+    for( Prediction p : eval.predictions() )
+    {
+    	 NominalPrediction pred = (NominalPrediction) p;
+    	
+    	writer.write(pred.distribution()[0] + "\t" + pred.weight() + "\t" + 
+    				pred.actual() + "\t" + pred.predicted() + "\n" );
+    }
+    writer.flush();  writer.close();
 
     // plot curve
     ThresholdVisualizePanel vmc = new ThresholdVisualizePanel();
