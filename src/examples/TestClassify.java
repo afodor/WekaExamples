@@ -1,5 +1,6 @@
 package examples;
 
+import java.awt.BorderLayout;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -8,18 +9,22 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+
 import parsers.NewRDPParserFileLine;
 import utils.ConfigReader;
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.Evaluation;
+import weka.classifiers.evaluation.ThresholdCurve;
 import weka.classifiers.trees.RandomForest;
 import weka.core.Instance;
 import weka.core.Instances;
+import weka.core.Utils;
 import weka.core.converters.ConverterUtils.DataSource;
+import weka.gui.visualize.PlotData2D;
+import weka.gui.visualize.ThresholdVisualizePanel;
 
 public class TestClassify
 {
-	/*
 	public static void main(String[] args) throws Exception
 	{
 		Random random = new Random(0);
@@ -59,8 +64,8 @@ public class TestClassify
 		}
 		
 	}
-	*/
 	
+	/*
 	public static void main(String[] args) throws Exception
 	{
 		Random random = new Random(0);
@@ -98,6 +103,7 @@ public class TestClassify
 			
 		}
 	}
+	*/
 
 	
 	private static void scrambeLastColumn( Instances instances, Random random )
@@ -144,9 +150,47 @@ public class TestClassify
 		return aList;
 	}
 	
+	// modded from https://weka.wikispaces.com/Generating+ROC+curve
+	public static void generateROC(Evaluation eval, int classIndex) throws Exception
+	{
+		ThresholdCurve tc = new ThresholdCurve();
+	     Instances result = tc.getCurve(eval.predictions(), classIndex);
+	 
+	     // plot curve
+	    ThresholdVisualizePanel vmc = new ThresholdVisualizePanel();
+	     vmc.setROCString("(Area under ROC = " +
+	        Utils.doubleToString(tc.getROCArea(result), 4) + ")");
+	     vmc.setName(result.relationName());
+	     PlotData2D tempd = new PlotData2D(result);
+	     tempd.setPlotName(result.relationName());
+	     tempd.addInstanceNumberAttribute();
+	     // specify which points are connected
+	     boolean[] cp = new boolean[result.numInstances()];
+	     for (int n = 1; n < cp.length; n++)
+	       cp[n] = true;
+	     tempd.setConnectPoints(cp);
+	     // add plot
+	     vmc.addPlot(tempd);
+	 
+	     // display curve
+	     String plotName = vmc.getName();
+	     final javax.swing.JFrame jf =
+	       new javax.swing.JFrame("Weka Classifier Visualize: "+plotName);
+	     jf.setSize(500,400);
+	     jf.getContentPane().setLayout(new BorderLayout());
+	     jf.getContentPane().add(vmc, BorderLayout.CENTER);
+	     jf.addWindowListener(new java.awt.event.WindowAdapter() {
+	       public void windowClosing(java.awt.event.WindowEvent e) {
+	       jf.dispose();
+	       }
+	     });
+	     jf.setVisible(true);
+	}
+	
 	public static List<Double> getRocForTrainingToTest(Instances trainingData, Instances testData,
 				Random random, int numIterations) throws Exception
 	{
+		System.out.println("Go");
 
 		List<Double> rocAreas = new ArrayList<Double>();
 		
@@ -182,13 +226,17 @@ public class TestClassify
 			Instances data = DataSource.read(inFile.getAbsolutePath());
 			data.setClassIndex(data.numAttributes() -1);
 			Evaluation ev = new Evaluation(data);
+			
 			AbstractClassifier rf = new RandomForest();
 			
-			//rf.buildClassifier(data);
+			rf.buildClassifier(data);
 			ev.crossValidateModel(rf, data, 10, random);
 			//System.out.println(ev.toSummaryString("\nResults\n\n", false));
 			//System.out.println(x + " " + ev.areaUnderROC(0) + " " + ev.pctCorrect());
 			percentCorrect.add(ev.pctCorrect());
+			
+		//	if( x== 0 )
+			//	generateROC(ev, data.numAttributes() -1);
 		}
 		
 		return percentCorrect;
