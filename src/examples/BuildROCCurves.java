@@ -26,6 +26,23 @@ import weka.gui.visualize.*;
   */
 public class BuildROCCurves{
 
+	private static void addOneCurve(Instances result,  ThresholdVisualizePanel vmc,
+				Color color) throws Exception
+	{
+		 PlotData2D tempd = new PlotData2D(result);
+		    tempd.setPlotName(result.relationName());
+		    tempd.addInstanceNumberAttribute();
+		    // specify which points are connected
+		    boolean[] cp = new boolean[result.numInstances()];
+		    for (int n = 1; n < cp.length; n++)
+		      cp[n] = true;
+		    tempd.setConnectPoints(cp);
+		    tempd.setCustomColour(color);
+		    // add plot
+		    vmc.addPlot(tempd);
+
+	}
+	
   /**
    * takes one argument: dataset in ARFF format (expects class to
    * be last attribute)
@@ -46,6 +63,7 @@ public class BuildROCCurves{
     int classIndex = 0;
     Instances result = tc.getCurve(eval.predictions(), classIndex);
     
+    
     BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
     		"c:\\temp\\someTemp.txt")));
     
@@ -64,20 +82,19 @@ public class BuildROCCurves{
 
     // plot curve
     ThresholdVisualizePanel vmc = new ThresholdVisualizePanel();
+    addOneCurve(result, vmc, Color.black);
+    
     vmc.setROCString("(Area under ROC = " +
         Utils.doubleToString(tc.getROCArea(result), 4) + ")");
     vmc.setName(result.relationName());
-    PlotData2D tempd = new PlotData2D(result);
-    tempd.setPlotName(result.relationName());
-    tempd.addInstanceNumberAttribute();
-    // specify which points are connected
-    boolean[] cp = new boolean[result.numInstances()];
-    for (int n = 1; n < cp.length; n++)
-      cp[n] = true;
-    tempd.setConnectPoints(cp);
-    // add plot
-    vmc.addPlot(tempd);
-
+    
+    cl = new NaiveBayes();
+    cl.buildClassifier(data);
+    eval = new Evaluation(data);
+    eval.crossValidateModel(cl, data, 10, new Random(1));
+    result = tc.getCurve(eval.predictions(), classIndex);
+    addOneCurve(result, vmc, Color.red);
+   
     // display curve
     String plotName = vmc.getName();
     final javax.swing.JFrame jf =
