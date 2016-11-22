@@ -47,7 +47,7 @@ public class BuildROCCurves{
     Instances result = tc.getCurve(eval.predictions(), classIndex);
     
     BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
-    		"c:\\temp\\temp.txt")));
+    		"c:\\temp\\someTemp.txt")));
     
     writer.write("distribution\tweight\tactual\tpredicted\n");
     
@@ -55,6 +55,8 @@ public class BuildROCCurves{
     {
     	 NominalPrediction pred = (NominalPrediction) p;
     	
+    	 
+    	 // the sort will happen on distribution...
     	writer.write(pred.distribution()[0] + "\t" + pred.weight() + "\t" + 
     				pred.actual() + "\t" + pred.predicted() + "\n" );
     }
