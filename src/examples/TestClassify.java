@@ -1,6 +1,7 @@
 package examples;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -19,7 +20,6 @@ import weka.classifiers.evaluation.ThresholdCurve;
 import weka.classifiers.trees.RandomForest;
 import weka.core.Instance;
 import weka.core.Instances;
-import weka.core.Utils;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.gui.visualize.PlotData2D;
 import weka.gui.visualize.ThresholdVisualizePanel;
@@ -152,16 +152,12 @@ public class TestClassify
 	}
 	
 	// modded from https://weka.wikispaces.com/Generating+ROC+curve
-	public static void generateROC(Evaluation eval) throws Exception
+	public static void addROC(Evaluation eval, ThresholdVisualizePanel vmc) throws Exception
 	{
 		ThresholdCurve tc = new ThresholdCurve();
 	     Instances result = tc.getCurve(eval.predictions(), 0);
 	 
 	     // plot curve
-	    ThresholdVisualizePanel vmc = new ThresholdVisualizePanel();
-	     vmc.setROCString("(Area under ROC = " +
-	        Utils.doubleToString(tc.getROCArea(result), 4) + ")");
-	     vmc.setName(result.relationName());
 	     PlotData2D tempd = new PlotData2D(result);
 	     tempd.setPlotName(result.relationName());
 	     tempd.addInstanceNumberAttribute();
@@ -170,22 +166,11 @@ public class TestClassify
 	     for (int n = 1; n < cp.length; n++)
 	       cp[n] = true;
 	     tempd.setConnectPoints(cp);
+	     tempd.setCustomColour(Color.black);
 	     // add plot
 	     vmc.addPlot(tempd);
 	 
-	     // display curve
-	     String plotName = vmc.getName();
-	     final javax.swing.JFrame jf =
-	       new javax.swing.JFrame("Weka Classifier Visualize: "+plotName);
-	     jf.setSize(500,400);
-	     jf.getContentPane().setLayout(new BorderLayout());
-	     jf.getContentPane().add(vmc, BorderLayout.CENTER);
-	     jf.addWindowListener(new java.awt.event.WindowAdapter() {
-	       public void windowClosing(java.awt.event.WindowEvent e) {
-	       jf.dispose();
-	       }
-	     });
-	     jf.setVisible(true);
+	     
 	}
 	
 	public static List<Double> getRocForTrainingToTest(Instances trainingData, Instances testData,
@@ -220,6 +205,23 @@ public class TestClassify
 	public static List<Double> getPercentCorrectForOneFile( File inFile, int numPermutations, Random random ) 
 				throws Exception
 	{
+		 ThresholdVisualizePanel vmc = new ThresholdVisualizePanel();
+		 vmc.setName(inFile.getName());
+		 
+		// display curve
+	     final javax.swing.JFrame jf =
+	       new javax.swing.JFrame("Weka Classifier Visualize: "+inFile.getName());
+	     jf.setSize(500,400);
+	     jf.getContentPane().setLayout(new BorderLayout());
+	     jf.getContentPane().add(vmc, BorderLayout.CENTER);
+	     jf.addWindowListener(new java.awt.event.WindowAdapter() {
+	       public void windowClosing(java.awt.event.WindowEvent e) {
+	       jf.dispose();
+	       }
+	     });
+	     jf.setVisible(true);
+		 
+		
 		List<Double> percentCorrect = new ArrayList<Double>();
 		
 		for( int x=0; x< numPermutations; x++)
@@ -236,8 +238,7 @@ public class TestClassify
 			//System.out.println(x + " " + ev.areaUnderROC(0) + " " + ev.pctCorrect());
 			percentCorrect.add(ev.pctCorrect());
 			
-			if( x== 0 )
-				generateROC(ev);
+			addROC(ev,vmc);
 		}
 		
 		return percentCorrect;
