@@ -115,7 +115,7 @@ public class TestClassify
 	*/
 
 	
-	private static void scrambeLastColumn( Instances instances, Random random )
+	public static void scrambeLastColumn( Instances instances, Random random )
 	{
 		List<Double> list = new ArrayList<Double>();
 		
@@ -211,7 +211,7 @@ public class TestClassify
 		return rocAreas;
 	}
 	
-	private static ThresholdVisualizePanel getVisPanel(String title) throws Exception
+	public static ThresholdVisualizePanel getVisPanel(String title) throws Exception
 	{
 
 		 ThresholdVisualizePanel vmc = new ThresholdVisualizePanel();

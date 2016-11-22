@@ -40,8 +40,8 @@ public class WriteToArff
 	
 	private static boolean include(String[] splits)
 	{
-		if( splits[3].equals("FALSE") &&  Integer.parseInt(splits[2]) == 1 &&
-					! splits.equals("NA"))
+		if( splits[3].equals("false") &&  Integer.parseInt(splits[2]) == 1 &&
+					! splits[6].equals("NA"))
 			return true;
 		
 		return false;
@@ -74,8 +74,10 @@ public class WriteToArff
 			
 			String[] topSplits = reader.readLine().replaceAll("\"","").split("\t");
 			
+			
 			for( int y=0; y < topSplits.length; y++)
 			{
+				if( y == 5 || y >= 9)
 				writer.write("@attribute " + topSplits[y].replaceAll(" ", "_") + " numeric\n");
 			}
 			
@@ -96,16 +98,17 @@ public class WriteToArff
 				if(include(splits))
 				{
 
-					for( int y=3; y < splits.length; y++)
+					for( int y=0; y < splits.length; y++)
 					{
-						writer.write( splits[y] + ",");
+						if( y==5 || y >=9)
+							writer.write( splits[y] + ",");
 					}
 					
-					if( splits[1].equals("0") )
+					if( splits[6].equals("0") )
 						writer.write("false\n");
-					else if( splits[1].equals("1"))
+					else if( splits[6].equals("1"))
 						writer.write("true\n");
-					else throw new Exception("Parsing error\n");
+					else throw new Exception("Parsing error " + splits[6]);
 				}
 				
 			}
