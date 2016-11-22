@@ -1,13 +1,14 @@
 package examples;
 
 import java.awt.*;
-import java.io.*;
 import java.util.*;
 import weka.core.*;
+import weka.core.converters.ConverterUtils.DataSource;
 import weka.classifiers.*;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.evaluation.Evaluation;
 import weka.classifiers.evaluation.ThresholdCurve;
+import weka.classifiers.trees.RandomForest;
 import weka.gui.visualize.*;
 
 /**
@@ -15,6 +16,8 @@ import weka.gui.visualize.*;
   * NaiveBayes to generate the ROC data.
   *
   * @author FracPete
+  * 
+  * https://weka.wikispaces.com/Generating+ROC+curve
   */
 public class BuildROCCurves{
 
@@ -24,13 +27,12 @@ public class BuildROCCurves{
    */
   public static void main(String[] args) throws Exception {
     // load data
-    Instances data = new Instances(
-                          new BufferedReader(
-                            new FileReader(args[0])));
+    Instances data = DataSource.read(args[0]);
     data.setClassIndex(data.numAttributes() - 1);
 
     // train classifier
-    Classifier cl = new NaiveBayes();
+    Classifier cl = new RandomForest();
+    cl.buildClassifier(data);
     Evaluation eval = new Evaluation(data);
     eval.crossValidateModel(cl, data, 10, new Random(1));
 

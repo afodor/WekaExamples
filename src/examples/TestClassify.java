@@ -13,6 +13,7 @@ import java.util.Random;
 import parsers.NewRDPParserFileLine;
 import utils.ConfigReader;
 import weka.classifiers.AbstractClassifier;
+import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.evaluation.ThresholdCurve;
 import weka.classifiers.trees.RandomForest;
@@ -151,10 +152,10 @@ public class TestClassify
 	}
 	
 	// modded from https://weka.wikispaces.com/Generating+ROC+curve
-	public static void generateROC(Evaluation eval, int classIndex) throws Exception
+	public static void generateROC(Evaluation eval) throws Exception
 	{
 		ThresholdCurve tc = new ThresholdCurve();
-	     Instances result = tc.getCurve(eval.predictions(), classIndex);
+	     Instances result = tc.getCurve(eval.predictions(), 0);
 	 
 	     // plot curve
 	    ThresholdVisualizePanel vmc = new ThresholdVisualizePanel();
@@ -227,7 +228,7 @@ public class TestClassify
 			data.setClassIndex(data.numAttributes() -1);
 			Evaluation ev = new Evaluation(data);
 			
-			AbstractClassifier rf = new RandomForest();
+			Classifier rf = new RandomForest();
 			
 			rf.buildClassifier(data);
 			ev.crossValidateModel(rf, data, 10, random);
@@ -235,8 +236,8 @@ public class TestClassify
 			//System.out.println(x + " " + ev.areaUnderROC(0) + " " + ev.pctCorrect());
 			percentCorrect.add(ev.pctCorrect());
 			
-		//	if( x== 0 )
-			//	generateROC(ev, data.numAttributes() -1);
+			if( x== 0 )
+				generateROC(ev);
 		}
 		
 		return percentCorrect;
