@@ -258,7 +258,8 @@ public class TestClassify
 			ev.crossValidateModel(rf, data, 10, random);
 			//System.out.println(ev.toSummaryString("\nResults\n\n", false));
 			//System.out.println(x + " " + ev.areaUnderROC(0) + " " + ev.pctCorrect());
-			percentCorrect.add(ev.pctCorrect());
+			percentCorrect.add(ev.areaUnderPRC(0));
+			System.out.println(ev.areaUnderPRC(0));
 			
 			if( tvp != null)
 				addROC(ev,tvp, scramble ? Color.red: Color.black);
