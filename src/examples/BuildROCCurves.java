@@ -27,10 +27,10 @@ import weka.gui.visualize.*;
 public class BuildROCCurves{
 
 	private static void addOneCurve(Instances result,  ThresholdVisualizePanel vmc,
-				Color color) throws Exception
+				Color color, String plotName) throws Exception
 	{
 		 PlotData2D tempd = new PlotData2D(result);
-		    tempd.setPlotName(result.relationName());
+		    tempd.setPlotName(plotName);
 		    tempd.addInstanceNumberAttribute();
 		    // specify which points are connected
 		    boolean[] cp = new boolean[result.numInstances()];
@@ -82,7 +82,7 @@ public class BuildROCCurves{
 
     // plot curve
     ThresholdVisualizePanel vmc = new ThresholdVisualizePanel();
-    addOneCurve(result, vmc, Color.black);
+    addOneCurve(result, vmc, Color.black, "RandomForest");
     
     vmc.setROCString("(Area under ROC = " +
         Utils.doubleToString(tc.getROCArea(result), 4) + ")");
@@ -93,7 +93,7 @@ public class BuildROCCurves{
     eval = new Evaluation(data);
     eval.crossValidateModel(cl, data, 10, new Random(1));
     result = tc.getCurve(eval.predictions(), classIndex);
-    addOneCurve(result, vmc, Color.red);
+    addOneCurve(result, vmc, Color.red, "Naive Bayes");
    
     // display curve
     String plotName = vmc.getName();
