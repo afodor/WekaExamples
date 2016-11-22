@@ -75,7 +75,7 @@ public class TryMultiThreading
 			{
 
 				this.rocResults = TestClassify.getPercentCorrectForOneFile(
-						fileToRun, numPermutations, random);
+						fileToRun, numPermutations, random,false,null);
 			}
 			catch(Exception ex)
 			{

@@ -43,12 +43,20 @@ public class TestClassify
 			
 			File adenomas = new File("C:\\adenomasRelease\\spreadsheets\\pivoted_" + 
 					NewRDPParserFileLine.TAXA_ARRAY[x] + 	"LogNormalWithMetadataBigSpace.arff");
-			List<Double> firstARoc = getPercentCorrectForOneFile(adenomas, numPermutations,random);
+			
+			ThresholdVisualizePanel tvp = getVisPanel(adenomas.getName());
+			
+			List<Double> firstARoc = 
+					getPercentCorrectForOneFile(adenomas, numPermutations,random,false,tvp);
+			getPercentCorrectForOneFile(adenomas, numPermutations,random,true,tvp);
 			
 			File ad2 = new File("C:\\tope_Sep_2015\\spreadsheets\\" + 
 					NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumnsLogNormalPlusMetadataBigSpace.arff");
 			
-			List<Double> secondROC = getPercentCorrectForOneFile(ad2, numPermutations,random);;
+			tvp = getVisPanel(ad2.getName());
+			
+			List<Double> secondROC = getPercentCorrectForOneFile(ad2, numPermutations,random,false,tvp);
+			getPercentCorrectForOneFile(ad2, numPermutations,random,true,tvp);
 			
 			Instances trainData = DataSource.read(ad2.getAbsolutePath());
 			Instances testData = DataSource.read(adenomas.getAbsolutePath());
@@ -152,7 +160,8 @@ public class TestClassify
 	}
 	
 	// modded from https://weka.wikispaces.com/Generating+ROC+curve
-	public static void addROC(Evaluation eval, ThresholdVisualizePanel vmc) throws Exception
+	public static void addROC(Evaluation eval, ThresholdVisualizePanel vmc,
+			Color color) throws Exception
 	{
 		ThresholdCurve tc = new ThresholdCurve();
 	     Instances result = tc.getCurve(eval.predictions(), 0);
@@ -166,7 +175,7 @@ public class TestClassify
 	     for (int n = 1; n < cp.length; n++)
 	       cp[n] = true;
 	     tempd.setConnectPoints(cp);
-	     tempd.setCustomColour(Color.black);
+	     tempd.setCustomColour(color);
 	     // add plot
 	     vmc.addPlot(tempd);
 	 
@@ -202,15 +211,15 @@ public class TestClassify
 		return rocAreas;
 	}
 	
-	public static List<Double> getPercentCorrectForOneFile( File inFile, int numPermutations, Random random ) 
-				throws Exception
+	private static ThresholdVisualizePanel getVisPanel(String title) throws Exception
 	{
+
 		 ThresholdVisualizePanel vmc = new ThresholdVisualizePanel();
-		 vmc.setName(inFile.getName());
+		 vmc.setName(title);
 		 
 		// display curve
 	     final javax.swing.JFrame jf =
-	       new javax.swing.JFrame("Weka Classifier Visualize: "+inFile.getName());
+	       new javax.swing.JFrame("Weka Classifier Visualize: "+title);
 	     jf.setSize(500,400);
 	     jf.getContentPane().setLayout(new BorderLayout());
 	     jf.getContentPane().add(vmc, BorderLayout.CENTER);
@@ -220,13 +229,26 @@ public class TestClassify
 	       }
 	     });
 	     jf.setVisible(true);
-		 
+	     
+	     return vmc;
+	
+	}
+	
+	public static List<Double> getPercentCorrectForOneFile( File inFile, 
+			int numPermutations, Random random , boolean scramble, 
+				ThresholdVisualizePanel tvp) 
+				throws Exception
+	{	 
 		
 		List<Double> percentCorrect = new ArrayList<Double>();
 		
 		for( int x=0; x< numPermutations; x++)
 		{
 			Instances data = DataSource.read(inFile.getAbsolutePath());
+			
+			if(scramble)
+				scrambeLastColumn(data, random);
+			
 			data.setClassIndex(data.numAttributes() -1);
 			Evaluation ev = new Evaluation(data);
 			
@@ -238,7 +260,8 @@ public class TestClassify
 			//System.out.println(x + " " + ev.areaUnderROC(0) + " " + ev.pctCorrect());
 			percentCorrect.add(ev.pctCorrect());
 			
-			addROC(ev,vmc);
+			if( tvp != null)
+				addROC(ev,tvp, scramble ? Color.red: Color.black);
 		}
 		
 		return percentCorrect;
