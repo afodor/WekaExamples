@@ -17,7 +17,7 @@ import weka.gui.visualize.*;
   *
   * @author FracPete
   * 
-  * https://weka.wikispaces.com/Generating+ROC+curve
+  * modded from  https://weka.wikispaces.com/Generating+ROC+curve
   */
 public class BuildROCCurves{
 
