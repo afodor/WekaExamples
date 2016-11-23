@@ -17,6 +17,8 @@ import utils.ConfigReader;
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
+import weka.classifiers.evaluation.NominalPrediction;
+import weka.classifiers.evaluation.Prediction;
 import weka.classifiers.evaluation.ThresholdCurve;
 import weka.classifiers.trees.RandomForest;
 import weka.core.Instance;
@@ -160,6 +162,45 @@ public class TestClassify
 		return aList;
 	}
 	
+	private static class Holder implements Comparable<Holder>
+	{
+		double predicted;
+		double actual;
+		double distribution;
+		
+		Holder(Prediction p)
+		{
+			NominalPrediction np = (NominalPrediction) p;
+			this.predicted = np.predicted();
+			this.actual = np.actual();
+			this.distribution = np.distribution()[0];
+		}
+		
+		@Override
+		public int compareTo(Holder o)
+		{
+			return Double.compare(o.distribution,this.distribution);		
+		}
+	}
+	
+	public static void writeROCToFile( Evaluation eval , File file ) throws Exception
+	{
+		List<Holder> list = new ArrayList<Holder>();
+		for( Prediction p : eval.predictions())
+			list.add(new Holder(p));
+		Collections.sort(list);
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+		
+		writer.write("predicted\tactual\tdistribution\n");
+		
+		for(Holder h : list)
+			writer.write(h.predicted + "\t" + h.actual + "\t" + h.distribution + "\n");
+		
+		
+		writer.flush();  writer.close();
+	}
+	
 	// modded from https://weka.wikispaces.com/Generating+ROC+curve
 	public static void addROC(Evaluation eval, final ThresholdVisualizePanel vmc,
 			Color color) throws Exception
@@ -178,6 +219,8 @@ public class TestClassify
 	       cp[n] = true;
 	    tempd.setConnectPoints(cp);
 	    tempd.setCustomColour(color);
+	    
+	    writeROCToFile(eval, new File("c:\\temp\\temp.txt"));
 	    
 	    // make sure everything in this thread will be visible to AWT thread
 	    synchronized(visibilityLock) {};
@@ -263,7 +306,7 @@ public class TestClassify
 				throws Exception
 	{	 
 		
-		List<Double> percentCorrect = new ArrayList<Double>();
+		List<Double> areaUnderCurve = new ArrayList<Double>();
 		
 		for( int x=0; x< numPermutations; x++)
 		{
@@ -281,14 +324,14 @@ public class TestClassify
 			ev.crossValidateModel(rf, data, 10, random);
 			//System.out.println(ev.toSummaryString("\nResults\n\n", false));
 			//System.out.println(x + " " + ev.areaUnderROC(0) + " " + ev.pctCorrect());
-			percentCorrect.add(ev.areaUnderPRC(0));
+			areaUnderCurve.add(ev.areaUnderPRC(0));
 			System.out.println(x + " " + ev.areaUnderPRC(0));
 			
 			if( tvp != null)
 				addROC(ev,tvp, scramble ? Color.red: Color.black);
 		}
 		
-		return percentCorrect;
+		return areaUnderCurve;
 		
 	}
 }
