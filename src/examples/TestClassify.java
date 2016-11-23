@@ -219,8 +219,8 @@ public class TestClassify
 	       cp[n] = true;
 	    tempd.setConnectPoints(cp);
 	    tempd.setCustomColour(color);
-	    
-	    writeROCToFile(eval, new File("c:\\temp\\temp.txt"));
+	   
+	    //writeROCToFile(eval, new File("c:\\temp\\temp.txt"));
 	    
 	    // make sure everything in this thread will be visible to AWT thread
 	    synchronized(visibilityLock) {};
