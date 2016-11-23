@@ -18,5 +18,6 @@ public class RunOneROCCurve
 		ThresholdVisualizePanel tvp = TestClassify.getVisPanel(inArff.getName());
 				
 		TestClassify.plotROCForAnArff(inArff, 1,random,false,tvp);	
+		TestClassify.plotROCForAnArff(inArff, 1,random,true,tvp);	
 	}
 }

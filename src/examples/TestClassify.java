@@ -300,9 +300,20 @@ public class TestClassify
 	
 	}
 	
+	
+
 	public static List<Double> plotROCForAnArff( File inFile, 
 			int numPermutations, Random random , boolean scramble, 
 				ThresholdVisualizePanel tvp) 
+				throws Exception
+	{	 
+		return plotROCForAnArff(inFile, numPermutations, random, scramble, tvp, 
+				new RandomForest(), Color.black);
+	}
+	
+	public static List<Double> plotROCForAnArff( File inFile, 
+			int numPermutations, Random random , boolean scramble, 
+				ThresholdVisualizePanel tvp, Classifier classifier, Color nonScrambleColor) 
 				throws Exception
 	{	 
 		
@@ -318,17 +329,15 @@ public class TestClassify
 			data.setClassIndex(data.numAttributes() -1);
 			Evaluation ev = new Evaluation(data);
 			
-			Classifier rf = new RandomForest();
-			
-			rf.buildClassifier(data);
-			ev.crossValidateModel(rf, data, 10, random);
+			classifier.buildClassifier(data);
+			ev.crossValidateModel(classifier, data, 10, random);
 			//System.out.println(ev.toSummaryString("\nResults\n\n", false));
 			//System.out.println(x + " " + ev.areaUnderROC(0) + " " + ev.pctCorrect());
 			areaUnderCurve.add(ev.areaUnderPRC(0));
 			System.out.println(x + " " + ev.areaUnderPRC(0));
 			
 			if( tvp != null)
-				addROC(ev,tvp, scramble ? Color.red: Color.black);
+				addROC(ev,tvp, scramble ? Color.red: nonScrambleColor);
 		}
 		
 		return areaUnderCurve;
