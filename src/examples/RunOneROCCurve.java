@@ -10,7 +10,8 @@ public class RunOneROCCurve
 	public static void main(String[] args) throws Exception
 	{
 		Random random = new Random();
-		// this file is at https://github.com/afodor/afodor.github.io/blob/master/classes/prog2016/pivoted_genusLogNormalWithMetadata.arff
+		// this file is at 
+		//https://github.com/afodor/afodor.github.io/blob/master/classes/prog2016/pivoted_genusLogNormalWithMetadata.arff
 		File inArff= new File(
 				"C:\\Users\\corei7\\git\\afodor.github.io\\classes\\prog2016\\pivoted_genusLogNormalWithMetadata.arff");
 				
