@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import javax.swing.SwingUtilities;
 
 import parsers.NewRDPParserFileLine;
 import utils.ConfigReader;
@@ -160,26 +161,40 @@ public class TestClassify
 	}
 	
 	// modded from https://weka.wikispaces.com/Generating+ROC+curve
-	public static void addROC(Evaluation eval, ThresholdVisualizePanel vmc,
+	public static void addROC(Evaluation eval, final ThresholdVisualizePanel vmc,
 			Color color) throws Exception
 	{
-		ThresholdCurve tc = new ThresholdCurve();
-	     Instances result = tc.getCurve(eval.predictions(), 0);
-	 
-	     // plot curve
-	     PlotData2D tempd = new PlotData2D(result);
-	     tempd.setPlotName(result.relationName());
-	     tempd.addInstanceNumberAttribute();
-	     // specify which points are connected
-	     boolean[] cp = new boolean[result.numInstances()];
-	     for (int n = 1; n < cp.length; n++)
-	       cp[n] = true;
-	     tempd.setConnectPoints(cp);
-	     tempd.setCustomColour(color);
-	     // add plot
-	     vmc.addPlot(tempd);
-	 
+		final ThresholdCurve tc = new ThresholdCurve();
+	    final Instances result = tc.getCurve(eval.predictions(), 0);
 	     
+	    final PlotData2D tempd = new PlotData2D(result);
+	    tempd.setPlotName(result.relationName());
+	    tempd.addInstanceNumberAttribute();
+	    
+	    // specify which points are connected
+	    boolean[] cp = new boolean[result.numInstances()];
+	    for (int n = 1; n < cp.length; n++)
+	       cp[n] = true;
+	    tempd.setConnectPoints(cp);
+	    tempd.setCustomColour(color);
+	    
+	     SwingUtilities.invokeLater( 
+	    		 new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						try
+						{
+							 // add plot
+						     vmc.addPlot(tempd);
+						}
+						catch(Exception ex)
+						{
+							throw new RuntimeException(ex);
+						}
+					}
+				});     
 	}
 	
 	public static List<Double> getRocForTrainingToTest(Instances trainingData, Instances testData,
