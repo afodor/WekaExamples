@@ -34,9 +34,9 @@ public class TestClassifyDiverticulosis
 			ThresholdVisualizePanel tvp = TestClassify.getVisPanel(inArff.getName());
 			
 			List<Double> firstARoc = 
-					TestClassify.getPercentCorrectForOneFile(inArff, numPermutations,random,false,tvp);
+					TestClassify.plotROCForAnArff(inArff, numPermutations,random,false,tvp);
 			List<Double> randomROC = 
-					TestClassify.getPercentCorrectForOneFile(inArff, numPermutations,random,true,tvp);
+					TestClassify.plotROCForAnArff(inArff, numPermutations,random,true,tvp);
 			
 			for(int y=0;y < firstARoc.size(); y++)
 				writer.write(firstARoc.get(y) + "\t" + randomROC.get(y) + "\n");

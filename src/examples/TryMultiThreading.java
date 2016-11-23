@@ -74,7 +74,7 @@ public class TryMultiThreading
 			try
 			{
 
-				this.rocResults = TestClassify.getPercentCorrectForOneFile(
+				this.rocResults = TestClassify.plotROCForAnArff(
 						fileToRun, numPermutations, random,false,null);
 			}
 			catch(Exception ex)

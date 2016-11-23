@@ -48,16 +48,16 @@ public class TestClassify
 			ThresholdVisualizePanel tvp = getVisPanel(adenomas.getName());
 			
 			List<Double> firstARoc = 
-					getPercentCorrectForOneFile(adenomas, numPermutations,random,false,tvp);
-			getPercentCorrectForOneFile(adenomas, numPermutations,random,true,tvp);
+					plotROCForAnArff(adenomas, numPermutations,random,false,tvp);
+			plotROCForAnArff(adenomas, numPermutations,random,true,tvp);
 			
 			File ad2 = new File("C:\\tope_Sep_2015\\spreadsheets\\" + 
 					NewRDPParserFileLine.TAXA_ARRAY[x] + "asColumnsLogNormalPlusMetadataBigSpace.arff");
 			
 			tvp = getVisPanel(ad2.getName());
 			
-			List<Double> secondROC = getPercentCorrectForOneFile(ad2, numPermutations,random,false,tvp);
-			getPercentCorrectForOneFile(ad2, numPermutations,random,true,tvp);
+			List<Double> secondROC = plotROCForAnArff(ad2, numPermutations,random,false,tvp);
+			plotROCForAnArff(ad2, numPermutations,random,true,tvp);
 			
 			Instances trainData = DataSource.read(ad2.getAbsolutePath());
 			Instances testData = DataSource.read(adenomas.getAbsolutePath());
@@ -249,7 +249,7 @@ public class TestClassify
 	
 	}
 	
-	public static List<Double> getPercentCorrectForOneFile( File inFile, 
+	public static List<Double> plotROCForAnArff( File inFile, 
 			int numPermutations, Random random , boolean scramble, 
 				ThresholdVisualizePanel tvp) 
 				throws Exception
