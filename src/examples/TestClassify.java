@@ -166,6 +166,7 @@ public class TestClassify
 	{
 		final ThresholdCurve tc = new ThresholdCurve();
 	    final Instances result = tc.getCurve(eval.predictions(), 0);
+	    final Object visibilityLock = new Object();
 	     
 	    final PlotData2D tempd = new PlotData2D(result);
 	    tempd.setPlotName(result.relationName());
@@ -178,6 +179,9 @@ public class TestClassify
 	    tempd.setConnectPoints(cp);
 	    tempd.setCustomColour(color);
 	    
+	    // make sure everything in this thread will be visible to AWT thread
+	    synchronized(visibilityLock) {};
+	    
 	     SwingUtilities.invokeLater( 
 	    		 new Runnable()
 				{
@@ -186,7 +190,11 @@ public class TestClassify
 					{
 						try
 						{
-							 // add plot
+
+						    // make sure everything is visible to the AWT thread
+						    synchronized(visibilityLock) {};
+							 
+						    // add plot
 						     vmc.addPlot(tempd);
 						}
 						catch(Exception ex)
