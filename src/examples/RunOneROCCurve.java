@@ -1,7 +1,9 @@
 package examples;
 
+import java.io.BufferedWriter;
 import java.io.File;
-import java.util.Random;
+import java.io.FileWriter;
+import java.util.List;
 
 import weka.gui.visualize.ThresholdVisualizePanel;
 
@@ -10,7 +12,6 @@ public class RunOneROCCurve
 	public static void main(String[] args) throws Exception
 	{
 		long startTime = System.currentTimeMillis();
-		Random random = new Random();
 		// this file is at 
 		//https://github.com/afodor/afodor.github.io/blob/master/classes/prog2016/pivoted_genusLogNormalWithMetadata.arff
 		File inArff= new File(
@@ -18,14 +19,23 @@ public class RunOneROCCurve
 				
 		ThresholdVisualizePanel tvp = TestClassify.getVisPanel(inArff.getName());
 		
-		int numPermutations = 20;
+		int numPermutations = 50;
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+				"c:\\temp\\comparisonRandomForest.txt")));
+		writer.write("notScrambled\tscrambled\n");
 		
 		//TestClassify.plotROCForAnArff(inArff, numPermutations,random,false,tvp);	
 		//TestClassify.plotROCForAnArff(inArff, numPermutations,random,true,tvp);	
 		
-		TestClassify.plotRocUsingMultithread(inArff, numPermutations, random, false, tvp);
-		TestClassify.plotRocUsingMultithread(inArff, numPermutations, random, true, tvp);
+		List<Double> notScrambled = TestClassify.plotRocUsingMultithread(inArff, numPermutations, false, tvp);
+		List<Double> scrambled =  TestClassify.plotRocUsingMultithread(inArff, numPermutations, true, tvp);
+		
+		for( int x=0; x < numPermutations; x++)
+			writer.write(notScrambled.get(x) + "\t" + scrambled.get(x) + "\n");
 		
 		System.out.println("Finished in " + (System.currentTimeMillis() - startTime)/1000f + " seconds ");
+		
+		writer.flush(); writer.close();
 	}
 }

@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.swing.SwingUtilities;
 
@@ -30,6 +31,8 @@ import weka.gui.visualize.ThresholdVisualizePanel;
 
 public class TestClassify
 {
+	private static final AtomicLong seedGenerator = new AtomicLong(0);
+	
 	public static void main(String[] args) throws Exception
 	{
 		Random random = new Random(0);
@@ -310,18 +313,16 @@ public class TestClassify
 		private final Semaphore semaphore;
 		private final List<Double> resultsList;
 		private final File inFile;
-		private final Random random;
 		private final boolean scramble;
 		private final ThresholdVisualizePanel tvp;
 		
 		
-		public Worker(Semaphore semaphore, List<Double> resultsList, File inFile, Random random, boolean scramble,
+		public Worker(Semaphore semaphore, List<Double> resultsList, File inFile, boolean scramble,
 				ThresholdVisualizePanel tvp)
 		{
 			this.semaphore = semaphore;
 			this.resultsList = resultsList;
 			this.inFile = inFile;
-			this.random = random;
 			this.scramble = scramble;
 			this.tvp = tvp;
 		}
@@ -331,6 +332,7 @@ public class TestClassify
 		{
 			try
 			{
+				Random random = new Random(seedGenerator.incrementAndGet());
 				Classifier classifier = new RandomForest();
 				Instances data = DataSource.read(inFile.getAbsolutePath());
 				
@@ -359,7 +361,7 @@ public class TestClassify
 	}
 	
 	public static List<Double> plotRocUsingMultithread( File inFile, 
-			int numPermutations, Random random , boolean scramble, 
+			int numPermutations,  boolean scramble, 
 			ThresholdVisualizePanel tvp) throws Exception
 	{
 
@@ -371,7 +373,7 @@ public class TestClassify
 		for( int x=0; x< numPermutations; x++)
 		{
 			s.acquire();
-			Worker w = new Worker(s, areaUnderCurve, inFile, random, scramble, tvp);
+			Worker w = new Worker(s, areaUnderCurve, inFile, scramble, tvp);
 			new Thread(w).start();
 		}
 		
