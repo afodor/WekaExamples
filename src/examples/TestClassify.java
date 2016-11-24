@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.Semaphore;
 
 import javax.swing.SwingUtilities;
 
@@ -302,6 +303,85 @@ public class TestClassify
 	
 	
 
+	
+	
+	private static class Worker implements Runnable
+	{
+		private final Semaphore semaphore;
+		private final List<Double> resultsList;
+		private final File inFile;
+		private final Random random;
+		private final boolean scramble;
+		private final ThresholdVisualizePanel tvp;
+		
+		
+		public Worker(Semaphore semaphore, List<Double> resultsList, File inFile, Random random, boolean scramble,
+				ThresholdVisualizePanel tvp)
+		{
+			this.semaphore = semaphore;
+			this.resultsList = resultsList;
+			this.inFile = inFile;
+			this.random = random;
+			this.scramble = scramble;
+			this.tvp = tvp;
+		}
+
+		@Override
+		public void run()
+		{
+			try
+			{
+				Classifier classifier = new RandomForest();
+				Instances data = DataSource.read(inFile.getAbsolutePath());
+				
+				if(scramble)
+					scrambeLastColumn(data, random);
+				
+				data.setClassIndex(data.numAttributes() -1);
+				Evaluation ev = new Evaluation(data);
+				
+				ev.crossValidateModel(classifier, data, 10, random);
+				resultsList.add(ev.areaUnderPRC(0));
+				
+				if( tvp != null)
+					addROC(ev,tvp, scramble ? Color.red: Color.black);
+			}
+			catch(Exception ex)
+			{
+				throw new RuntimeException(ex);
+			}
+			finally
+			{
+				semaphore.release();
+			}
+			
+		}
+	}
+	
+	public static List<Double> plotRocUsingMultithread( File inFile, 
+			int numPermutations, Random random , boolean scramble, 
+			ThresholdVisualizePanel tvp) throws Exception
+	{
+
+		final List<Double> areaUnderCurve = Collections.synchronizedList(new ArrayList<Double>());
+		
+		int numProcessors = Runtime.getRuntime().availableProcessors() + 1;
+		Semaphore s = new Semaphore(numProcessors);
+		
+		for( int x=0; x< numPermutations; x++)
+		{
+			s.acquire();
+			Worker w = new Worker(s, areaUnderCurve, inFile, random, scramble, tvp);
+			new Thread(w).start();
+		}
+		
+		for( int x=0; x < numProcessors; x++)
+			s.acquire();
+		
+		
+		return areaUnderCurve;
+	}
+	
 	public static List<Double> plotROCForAnArff( File inFile, 
 			int numPermutations, Random random , boolean scramble, 
 				ThresholdVisualizePanel tvp) 

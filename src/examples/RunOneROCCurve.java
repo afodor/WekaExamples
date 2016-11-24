@@ -20,8 +20,11 @@ public class RunOneROCCurve
 		
 		int numPermutations = 20;
 		
-		TestClassify.plotROCForAnArff(inArff, numPermutations,random,false,tvp);	
-		TestClassify.plotROCForAnArff(inArff, numPermutations,random,true,tvp);	
+		//TestClassify.plotROCForAnArff(inArff, numPermutations,random,false,tvp);	
+		//TestClassify.plotROCForAnArff(inArff, numPermutations,random,true,tvp);	
+		
+		TestClassify.plotRocUsingMultithread(inArff, numPermutations, random, false, tvp);
+		TestClassify.plotRocUsingMultithread(inArff, numPermutations, random, true, tvp);
 		
 		System.out.println("Finished in " + (System.currentTimeMillis() - startTime)/1000f + " seconds ");
 	}
