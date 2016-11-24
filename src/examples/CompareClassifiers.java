@@ -6,10 +6,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.List;
 
+import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.trees.RandomForest;
 import weka.gui.visualize.ThresholdVisualizePanel;
 
-public class RunOneROCCurve
+public class CompareClassifiers
 {
 	public static void main(String[] args) throws Exception
 	{
@@ -24,20 +25,18 @@ public class RunOneROCCurve
 		int numPermutations = 50;
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
-				"c:\\temp\\comparisonRandomForest.txt")));
-		writer.write("notScrambled\tscrambled\n");
+				"c:\\temp\\classifierComparison.txt")));
+		writer.write("randomForest\tnaiveBayes\toneR\n");
 		
-		//TestClassify.plotROCForAnArff(inArff, numPermutations,random,false,tvp);	
-		//TestClassify.plotROCForAnArff(inArff, numPermutations,random,true,tvp);	
-		
-		String className = RandomForest.class.getName();
-		List<Double> notScrambled = TestClassify.plotRocUsingMultithread(inArff, numPermutations, false, tvp,
-						className, Color.black);
-		List<Double> scrambled =  TestClassify.plotRocUsingMultithread(inArff, numPermutations, true, tvp,
-						className, Color.red);
-		
-		for( int x=0; x < numPermutations; x++)
-			writer.write(notScrambled.get(x) + "\t" + scrambled.get(x) + "\n");
+		List<Double> randomForest= TestClassify.plotRocUsingMultithread(inArff, numPermutations, false, tvp,
+						RandomForest.class.getName(), Color.black);
+		List<Double> naiveBayes=  TestClassify.plotRocUsingMultithread(inArff, numPermutations, true, tvp,
+						NaiveBayes.class.getName(), Color.blue);
+		List<Double> oneR=  TestClassify.plotRocUsingMultithread(inArff, numPermutations, true, tvp,
+				NaiveBayes.class.getName(), Color.red);
+
+		for(int x=0; x < numPermutations; x++)
+			writer.write(randomForest.get(x) + "\t" + naiveBayes.get(x) + "\t" + oneR.get(x) + "\n");
 		
 		System.out.println("Finished in " + (System.currentTimeMillis() - startTime)/1000f + " seconds ");
 		

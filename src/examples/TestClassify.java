@@ -316,10 +316,11 @@ public class TestClassify
 		private final boolean scramble;
 		private final ThresholdVisualizePanel tvp;
 		private final String classifierName;
+		private final Color plotColor;
 		
 		
 		public Worker(Semaphore semaphore, List<Double> resultsList, File inFile, boolean scramble,
-				ThresholdVisualizePanel tvp, String classifierName)
+				ThresholdVisualizePanel tvp, String classifierName, Color plotColor)
 		{
 			this.semaphore = semaphore;
 			this.resultsList = resultsList;
@@ -327,6 +328,7 @@ public class TestClassify
 			this.scramble = scramble;
 			this.tvp = tvp;
 			this.classifierName = classifierName;
+			this.plotColor =plotColor;
 		}
 
 		@Override
@@ -348,7 +350,7 @@ public class TestClassify
 				resultsList.add(ev.areaUnderPRC(0));
 				
 				if( tvp != null)
-					addROC(ev,tvp, scramble ? Color.red: Color.black);
+					addROC(ev,tvp, plotColor);
 			}
 			catch(Exception ex)
 			{
@@ -364,7 +366,7 @@ public class TestClassify
 	
 	public static List<Double> plotRocUsingMultithread( File inFile, 
 			int numPermutations,  boolean scramble, 
-			ThresholdVisualizePanel tvp, String className) throws Exception
+			ThresholdVisualizePanel tvp, String className, Color color) throws Exception
 	{
 
 		final List<Double> areaUnderCurve = Collections.synchronizedList(new ArrayList<Double>());
@@ -375,7 +377,7 @@ public class TestClassify
 		for( int x=0; x< numPermutations; x++)
 		{
 			s.acquire();
-			Worker w = new Worker(s, areaUnderCurve, inFile, scramble, tvp, className);
+			Worker w = new Worker(s, areaUnderCurve, inFile, scramble, tvp, className, color);
 			new Thread(w).start();
 		}
 		
