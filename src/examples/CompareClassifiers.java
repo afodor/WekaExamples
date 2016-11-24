@@ -29,15 +29,15 @@ public class CompareClassifiers
 				"c:\\temp\\classifierComparison.txt")));
 		writer.write("randomForest\tnaiveBayes\toneR\tsvm\n");
 		
+		List<Double> supportVector = TestClassify.plotRocUsingMultithread(inArff, numPermutations, false, tvp,
+				SMO.class.getName(), Color.green);
 		List<Double> randomForest= TestClassify.plotRocUsingMultithread(inArff, numPermutations, false, tvp,
 						RandomForest.class.getName(), Color.black);
-		List<Double> naiveBayes=  TestClassify.plotRocUsingMultithread(inArff, numPermutations, true, tvp,
+		List<Double> naiveBayes=  TestClassify.plotRocUsingMultithread(inArff, numPermutations, false, tvp,
 						NaiveBayes.class.getName(), Color.blue);
-		List<Double> oneR=  TestClassify.plotRocUsingMultithread(inArff, numPermutations, true, tvp,
+		List<Double> oneR=  TestClassify.plotRocUsingMultithread(inArff, numPermutations, false, tvp,
 				NaiveBayes.class.getName(), Color.red);
-		List<Double> supportVector = TestClassify.plotRocUsingMultithread(inArff, numPermutations, true, tvp,
-				SMO.class.getName(), Color.green);
-
+		
 		for(int x=0; x < numPermutations; x++)
 			writer.write(randomForest.get(x) + "\t" + naiveBayes.get(x) + "\t" + oneR.get(x) +"\t"+ 
 						supportVector.get(x) + 	"\n");
