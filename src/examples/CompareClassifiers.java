@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.util.List;
 
 import weka.classifiers.bayes.NaiveBayes;
+import weka.classifiers.functions.SMO;
 import weka.classifiers.trees.RandomForest;
 import weka.gui.visualize.ThresholdVisualizePanel;
 
@@ -26,7 +27,7 @@ public class CompareClassifiers
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				"c:\\temp\\classifierComparison.txt")));
-		writer.write("randomForest\tnaiveBayes\toneR\n");
+		writer.write("randomForest\tnaiveBayes\toneR\tsvm\n");
 		
 		List<Double> randomForest= TestClassify.plotRocUsingMultithread(inArff, numPermutations, false, tvp,
 						RandomForest.class.getName(), Color.black);
@@ -34,9 +35,12 @@ public class CompareClassifiers
 						NaiveBayes.class.getName(), Color.blue);
 		List<Double> oneR=  TestClassify.plotRocUsingMultithread(inArff, numPermutations, true, tvp,
 				NaiveBayes.class.getName(), Color.red);
+		List<Double> supportVector = TestClassify.plotRocUsingMultithread(inArff, numPermutations, true, tvp,
+				SMO.class.getName(), Color.green);
 
 		for(int x=0; x < numPermutations; x++)
-			writer.write(randomForest.get(x) + "\t" + naiveBayes.get(x) + "\t" + oneR.get(x) + "\n");
+			writer.write(randomForest.get(x) + "\t" + naiveBayes.get(x) + "\t" + oneR.get(x) +"\t"+ 
+						supportVector.get(x) + 	"\n");
 		
 		System.out.println("Finished in " + (System.currentTimeMillis() - startTime)/1000f + " seconds ");
 		
