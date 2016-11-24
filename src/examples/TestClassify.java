@@ -315,16 +315,18 @@ public class TestClassify
 		private final File inFile;
 		private final boolean scramble;
 		private final ThresholdVisualizePanel tvp;
+		private final String classifierName;
 		
 		
 		public Worker(Semaphore semaphore, List<Double> resultsList, File inFile, boolean scramble,
-				ThresholdVisualizePanel tvp)
+				ThresholdVisualizePanel tvp, String classifierName)
 		{
 			this.semaphore = semaphore;
 			this.resultsList = resultsList;
 			this.inFile = inFile;
 			this.scramble = scramble;
 			this.tvp = tvp;
+			this.classifierName = classifierName;
 		}
 
 		@Override
@@ -333,7 +335,7 @@ public class TestClassify
 			try
 			{
 				Random random = new Random(seedGenerator.incrementAndGet());
-				Classifier classifier = new RandomForest();
+				Classifier classifier = (Classifier) Class.forName(classifierName).newInstance();
 				Instances data = DataSource.read(inFile.getAbsolutePath());
 				
 				if(scramble)
@@ -362,7 +364,7 @@ public class TestClassify
 	
 	public static List<Double> plotRocUsingMultithread( File inFile, 
 			int numPermutations,  boolean scramble, 
-			ThresholdVisualizePanel tvp) throws Exception
+			ThresholdVisualizePanel tvp, String className) throws Exception
 	{
 
 		final List<Double> areaUnderCurve = Collections.synchronizedList(new ArrayList<Double>());
@@ -373,7 +375,7 @@ public class TestClassify
 		for( int x=0; x< numPermutations; x++)
 		{
 			s.acquire();
-			Worker w = new Worker(s, areaUnderCurve, inFile, scramble, tvp);
+			Worker w = new Worker(s, areaUnderCurve, inFile, scramble, tvp, className);
 			new Thread(w).start();
 		}
 		
