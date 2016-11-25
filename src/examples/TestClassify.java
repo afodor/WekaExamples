@@ -227,29 +227,28 @@ public class TestClassify
 	    //writeROCToFile(eval, new File("c:\\temp\\temp.txt"));
 	    
 	    // make sure everything in this thread will be visible to AWT thread
-	    synchronized(visibilityLock) {};
-	    
-	     SwingUtilities.invokeLater( 
-	    		 new Runnable()
+	    synchronized(visibilityLock) 
+	    {
+	    	SwingUtilities.invokeLater( new Runnable()
+			{
+				@Override
+				public void run()
 				{
-					@Override
-					public void run()
-					{
-						try
-						{
-
-						    // make sure everything is visible to the AWT thread
-						    synchronized(visibilityLock) {};
-							 
-						    // add plot
+				    // make sure everything is visible to the AWT thread
+				    synchronized(visibilityLock) 
+				    {						
+				    	try
+				    	{
 						     vmc.addPlot(tempd);
 						}
 						catch(Exception ex)
 						{
 							throw new RuntimeException(ex);
 						}
-					}
-				});     
+				    }
+				}
+			});    
+    	}
 	}
 	
 	public static List<Double> getRocForTrainingToTest(Instances trainingData, Instances testData,
