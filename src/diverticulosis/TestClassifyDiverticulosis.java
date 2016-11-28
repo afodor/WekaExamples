@@ -1,5 +1,6 @@
 package diverticulosis;
 
+import java.awt.Color;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -9,6 +10,7 @@ import java.util.Random;
 import examples.TestClassify;
 import parsers.NewRDPParserFileLine;
 import utils.ConfigReader;
+import weka.classifiers.trees.RandomForest;
 import weka.gui.visualize.ThresholdVisualizePanel;
 
 public class TestClassifyDiverticulosis
@@ -34,9 +36,14 @@ public class TestClassifyDiverticulosis
 			ThresholdVisualizePanel tvp = TestClassify.getVisPanel(inArff.getName());
 			
 			List<Double> firstARoc = 
-					TestClassify.plotROCForAnArff(inArff, numPermutations,random,false,tvp);
+					TestClassify.plotRocUsingMultithread(
+							inArff, numPermutations, false, tvp, new RandomForest().getClass().getName(), 
+							Color.BLACK);
 			List<Double> randomROC = 
-					TestClassify.plotROCForAnArff(inArff, numPermutations,random,true,tvp);
+					TestClassify.plotRocUsingMultithread(
+							inArff, numPermutations, true, tvp, new RandomForest().getClass().getName(), 
+							Color.RED);
+
 			
 			for(int y=0;y < firstARoc.size(); y++)
 				writer.write(firstARoc.get(y) + "\t" + randomROC.get(y) + "\n");
