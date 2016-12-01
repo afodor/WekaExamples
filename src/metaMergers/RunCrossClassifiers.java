@@ -43,8 +43,9 @@ public class RunCrossClassifiers
 					File testFile = new File(yProject.getArffMergedFileFromRDP(taxa));
 					String classifierName = new RandomForest().getClass().getName();
 					
-					getPercentCorrect(trainFile, testFile, 1, false, tvp, classifierName, Color.RED);
 					getPercentCorrect(trainFile, testFile, 50, true, tvp, classifierName, Color.BLACK);
+					getPercentCorrect(trainFile, testFile, 1, false, tvp, classifierName, Color.RED);
+					
 				}
 	}
 	
