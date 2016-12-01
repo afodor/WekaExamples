@@ -1,9 +1,13 @@
 package metaMergers;
 
 import java.awt.Color;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Semaphore;
@@ -12,6 +16,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import examples.TestClassify;
 import parsers.NewRDPParserFileLine;
 import projectDescriptors.AbstractProjectDescription;
+import utils.ConfigReader;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.trees.RandomForest;
@@ -29,27 +34,66 @@ public class RunCrossClassifiers
 				BringIntoOneNameSpace.getAllProjects();
 		
 		for( int t =1; t < NewRDPParserFileLine.TAXA_ARRAY.length; t++)
-		for(int x=0; x < projectList.size(); x++)
-			for( int y=0; y < projectList.size(); y++)
-				if( x != y)
-				{
-					String taxa = NewRDPParserFileLine.TAXA_ARRAY[t];
-					AbstractProjectDescription xProject = projectList.get(x);
-					AbstractProjectDescription yProject = projectList.get(y);
-					ThresholdVisualizePanel tvp = TestClassify.getVisPanel( taxa+ " "+
-							xProject.getProjectName() + " " + yProject.getProjectName() );
-					
-					File trainFile =new File(xProject.getArffMergedFileFromRDP(taxa));
-					File testFile = new File(yProject.getArffMergedFileFromRDP(taxa));
-					String classifierName = new RandomForest().getClass().getName();
-					
-					getPercentCorrect(trainFile, testFile, 50, true, tvp, classifierName, Color.BLACK);
-					getPercentCorrect(trainFile, testFile, 1, false, tvp, classifierName, Color.RED);
-					
-				}
+		{
+			HashMap<String, List<Double>> resultsMap = new LinkedHashMap<String,List<Double>>();
+			
+			for(int x=0; x < projectList.size(); x++)
+				for( int y=0; y < projectList.size(); y++)
+					if( x != y)
+					{
+						String taxa = NewRDPParserFileLine.TAXA_ARRAY[t];
+						AbstractProjectDescription xProject = projectList.get(x);
+						AbstractProjectDescription yProject = projectList.get(y);
+						ThresholdVisualizePanel tvp = TestClassify.getVisPanel( taxa+ " "+
+								xProject.getProjectName() + " " + yProject.getProjectName() );
+						String key = xProject.getProjectName() + "_vs_" + yProject.getProjectName();
+						System.out.println(key);
+						List<Double> results = new ArrayList<Double>();
+						resultsMap.put(key, results);
+						
+						File trainFile =new File(xProject.getArffMergedFileFromRDP(taxa));
+						File testFile = new File(yProject.getArffMergedFileFromRDP(taxa));
+						String classifierName = new RandomForest().getClass().getName();
+						
+						results.addAll(getPercentCorrect(trainFile, testFile, 1, false, tvp, classifierName, Color.RED));
+						results.addAll(getPercentCorrect(trainFile, testFile, 50, true, tvp, classifierName, Color.BLACK));
+						writeResults(resultsMap, taxa);
+					}
+		}
+		
 	}
 	
-
+	private static void writeResults( HashMap<String, List<Double>> resultsMap , String level )
+		throws Exception
+	{
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+			ConfigReader.getMergedArffDir() + File.separator + "cross_" + level + ".txt"	)));
+		
+		writer.write( "count\tisScrambled"  );
+		
+		List<String> keys = new ArrayList<>(resultsMap.keySet());
+		
+		for(String s : keys)
+			writer.write("\t" + s);
+		
+		writer.write("\n");
+		
+		int size = resultsMap.get(keys.get(0)).size();
+		
+		for( int x=0; x < size; x++)
+		{
+			writer.write((x+1) + "\t");
+			writer.write( (x != 0) + "");
+			
+			for(String key : keys)
+				writer.write("\t" + resultsMap.get(key).get(x));
+			
+			writer.write("\n");
+		}
+		
+		writer.flush();  writer.close();
+	}
+	
 	public static List<Double> getPercentCorrect( File trainingDataFile, 
 			File testDataFile, int numPermutations,
 						boolean scramble, ThresholdVisualizePanel tvp,
