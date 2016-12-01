@@ -6,16 +6,20 @@ import utils.ConfigReader;
 
 public class Adenomas2015ProjectDescriptor extends AbstractProjectDescription
 {
+	
+	
 	@Override
 	public String getProjectName()
 	{
-		return "Adenomas2012";
+		return "Adenomas2015";
 	}
 	
 	@Override
 	public String getArffIndiviudalFileFromRDP(String taxa) throws Exception
 	{
-		return ConfigReader.getMergedArffDir() + File.separator + "Adenomas2012" 
-						+ File.separator + "pivoted_" + taxa +  "LogNormalWithMetadata.arff";
+		return ConfigReader.getMergedArffDir() + File.separator + "Adenomas2015" 
+						+ File.separator + taxa +
+						"asColumnsLogNormalPlusMetadataFilteredCaseControl.arff";
 	}
+
 }

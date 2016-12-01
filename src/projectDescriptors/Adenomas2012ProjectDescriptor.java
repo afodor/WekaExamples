@@ -9,14 +9,13 @@ public class Adenomas2012ProjectDescriptor extends AbstractProjectDescription
 	@Override
 	public String getProjectName()
 	{
-		return "Adenomas2015";
+		return "Adenomas2012";
 	}
 	
 	@Override
 	public String getArffIndiviudalFileFromRDP(String taxa) throws Exception
 	{
-		return ConfigReader.getMergedArffDir() + File.separator + "Adenomas2015" 
-						+ File.separator + taxa +
-						"asColumnsLogNormalPlusMetadataFilteredCaseControl.arff";
+		return ConfigReader.getMergedArffDir() + File.separator + "Adenomas2012" 
+						+ File.separator + "pivoted_" + taxa +  "LogNormalWithMetadata.arff";
 	}
 }

@@ -15,8 +15,8 @@ public class Divitriculosis2015ProjectDescriptor extends AbstractProjectDescript
 	@Override
 	public String getArffIndiviudalFileFromRDP(String taxa) throws Exception
 	{
-		return ConfigReader.getMergedArffDir() + File.separator + "Adenomas2015" 
-						+ File.separator + taxa +
+		return ConfigReader.getMergedArffDir() + File.separator + "Diverticulosis2015" 
+						+ File.separator + 
 						"pivoted_" + taxa + "asColumnsLogNormalPlusMetadata.arff";
 		 
 	}

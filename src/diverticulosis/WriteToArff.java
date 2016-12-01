@@ -78,7 +78,9 @@ public class WriteToArff
 			for( int y=0; y < topSplits.length; y++)
 			{
 				if( y == 5 || y >= 9)
-				writer.write("@attribute " + topSplits[y].replaceAll(" ", "_") + " numeric\n");
+				writer.write("@attribute " + 
+						topSplits[y].replaceAll(" ", "_").replaceAll("shannonEntropy", "shannonDiversity") 
+								+ " numeric\n");
 			}
 			
 			writer.write("@attribute isCase { true, false }\n");
