@@ -5,7 +5,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.List;
-import java.util.Random;
 
 import examples.TestClassify;
 import parsers.NewRDPParserFileLine;
@@ -17,7 +16,6 @@ public class TestClassifyDiverticulosis
 {
 	public static void main(String[] args) throws Exception
 	{
-		Random random = new Random(0);
 		int numPermutations = 50;
 
 		for( int x=1 ; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
