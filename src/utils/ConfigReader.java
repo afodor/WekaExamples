@@ -132,6 +132,8 @@ public class ConfigReader
 	
 	public static final String ADENOMAS_WEKA_DIR = "ADENOMAS_WEKA_DIR";
 	
+	public static final String MERGED_ARFF_DIR = "MERGED_ARFF_DIR";
+	
 	public static String getFragmentRecruiterSupportDir() throws Exception
 	{
 		return getConfigReader().getAProperty(FRAGMENT_RECRUITER_SUPPORT_DIR );
@@ -145,6 +147,11 @@ public class ConfigReader
 	public static String getBioLockJDir() throws Exception
 	{
 		return getConfigReader().getAProperty(BIOLOCK_J_DIR);
+	}
+	
+	public static String getMergedArffDir() throws Exception
+	{
+		return getConfigReader().getAProperty(MERGED_ARFF_DIR);
 	}
 	
 	public static String getSangLabMay2016Dir() throws Exception
