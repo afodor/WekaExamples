@@ -36,7 +36,7 @@ public class RunCrossClassifiers
 					String taxa = NewRDPParserFileLine.TAXA_ARRAY[t];
 					AbstractProjectDescription xProject = projectList.get(x);
 					AbstractProjectDescription yProject = projectList.get(y);
-					ThresholdVisualizePanel tvp = TestClassify.getVisPanel( t+ " "+
+					ThresholdVisualizePanel tvp = TestClassify.getVisPanel( taxa+ " "+
 							xProject.getProjectName() + " " + yProject.getProjectName() );
 					
 					File trainFile =new File(xProject.getArffMergedFileFromRDP(taxa));
