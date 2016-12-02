@@ -34,7 +34,7 @@ public class RunCrossClassifiers
 				BringIntoOneNameSpace.getAllProjects();
 		
 		for( int t =1; t < NewRDPParserFileLine.TAXA_ARRAY.length; t++)
-		{
+		{ 
 			HashMap<String, List<Double>> resultsMap = new LinkedHashMap<String,List<Double>>();
 			
 			for(int x=0; x < projectList.size(); x++)
@@ -44,10 +44,11 @@ public class RunCrossClassifiers
 						String taxa = NewRDPParserFileLine.TAXA_ARRAY[t];
 						AbstractProjectDescription xProject = projectList.get(x);
 						AbstractProjectDescription yProject = projectList.get(y);
-						ThresholdVisualizePanel tvp = TestClassify.getVisPanel( taxa+ " "+
-								xProject.getProjectName() + " " + yProject.getProjectName() );
+						ThresholdVisualizePanel tvp = null;
+						//ThresholdVisualizePanel tvp = TestClassify.getVisPanel( taxa+ " "+
+							//	xProject.getProjectName() + " " + yProject.getProjectName() );
 						String key = xProject.getProjectName() + "_vs_" + yProject.getProjectName();
-						System.out.println(key);
+						System.out.println( taxa + " " +  key);
 						List<Double> results = new ArrayList<Double>();
 						resultsMap.put(key, results);
 						
@@ -56,7 +57,7 @@ public class RunCrossClassifiers
 						String classifierName = new RandomForest().getClass().getName();
 						
 						results.addAll(getPercentCorrect(trainFile, testFile, 1, false, tvp, classifierName, Color.RED));
-						results.addAll(getPercentCorrect(trainFile, testFile, 50, true, tvp, classifierName, Color.BLACK));
+						results.addAll(getPercentCorrect(trainFile, testFile, 500, true, tvp, classifierName, Color.BLACK));
 						writeResults(resultsMap, taxa);
 					}
 		}
