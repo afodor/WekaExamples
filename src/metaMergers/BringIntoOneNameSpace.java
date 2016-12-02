@@ -16,6 +16,8 @@ import parsers.NewRDPParserFileLine;
 import projectDescriptors.AbstractProjectDescription;
 import projectDescriptors.Adenomas2012ProjectDescriptor;
 import projectDescriptors.Adenomas2015ProjectDescriptor;
+import projectDescriptors.China2015_Timepoint1;
+import projectDescriptors.China2015_Timepoint2;
 import projectDescriptors.Divitriculosis2015ProjectDescriptor;
 
 public class BringIntoOneNameSpace
@@ -24,6 +26,8 @@ public class BringIntoOneNameSpace
 	{
 		List<AbstractProjectDescription> list = new ArrayList<AbstractProjectDescription>();
 		
+		list.add(new China2015_Timepoint1());
+		list.add(new China2015_Timepoint2());
 		list.add(new Adenomas2012ProjectDescriptor());
 		list.add(new Adenomas2015ProjectDescriptor());
 
