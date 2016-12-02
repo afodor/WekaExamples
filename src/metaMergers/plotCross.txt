@@ -8,7 +8,7 @@ taxa <- c("phylum", "class", "order", "family", "genus")
 
 for( t in taxa) 
 {
-	par(mfrow=c(3,3))
+	par(mfrow=c(3,2))
 	normTests <- vector()
 	inFileName <- paste( "cross_" ,t, ".txt", sep="")
 	myT <- read.table(inFileName, sep="\t", header=TRUE)
@@ -16,7 +16,8 @@ for( t in taxa)
 	for(i in 3:ncol(myT))
 	{
 		shuffles <- myT[,i ]
-	 	hist(shuffles,breaks=40,main=paste(t,names(myT)[i]))
+		pValue <- sum( myT[1,i] <= myT[2:nrow(myT),i] ) / (nrow(myT) - 1)
+	 	hist(shuffles,breaks=40,main=paste(t,names(myT)[i],"p=", pValue))
 	 	points(myT[1,i],1,col="RED",cex=1.1,pch=19)	 	
 	}
 	
