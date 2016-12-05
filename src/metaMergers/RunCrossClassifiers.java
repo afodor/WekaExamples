@@ -166,7 +166,7 @@ public class RunCrossClassifiers
 				classifier.buildClassifier(trainData);
 				Evaluation ev = new Evaluation(trainData);
 				ev.evaluateModel(classifier, testData);
-				resultsList.add(ev.areaUnderPRC(0));
+				resultsList.add(ev.areaUnderROC(0));
 				
 				
 				if( tvp != null)
