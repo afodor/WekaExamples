@@ -15,7 +15,6 @@ import projectDescriptors.AbstractProjectDescription;
 import utils.ConfigReader;
 import weka.classifiers.rules.OneR;
 import weka.classifiers.trees.RandomForest;
-import weka.gui.visualize.ThresholdVisualizePanel;
 
 public class RunAllClassifiers
 {
