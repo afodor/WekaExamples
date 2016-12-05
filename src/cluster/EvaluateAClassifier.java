@@ -33,6 +33,9 @@ public class EvaluateAClassifier
 		
 		File inputFile = new File(apd.getArffMergedFileFromRDP(taxaLevel));
 		
+		if(! inputFile.exists())
+			throw new Exception("Could not find " + inputFile.getAbsolutePath());
+		
 		List<Double> unscrambled= 
 				TestClassify.plotRocUsingMultithread(inputFile, numPermutations, false, null,
 				classifier.getClass().getName(), Color.green);
