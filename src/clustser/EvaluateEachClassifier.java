@@ -69,7 +69,7 @@ public class EvaluateEachClassifier
 				
 				BufferedWriter aWriter = writerMap.get(index);
 				
-				aWriter.write("java -cp " + CLASSPATH_STRING + 
+				aWriter.write("java -cp " + CLASSPATH_STRING + " " + 
 						"cluster.EvaluateAClassifier " + apd.getClass().getName() + " " + 
 						c.getClass().getName() + " " + taxa + " "+ numPermutations + "\n"
 						);
