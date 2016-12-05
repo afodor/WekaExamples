@@ -1,15 +1,15 @@
 package examples;
 
 import java.awt.Color;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.util.List;
 
 import weka.classifiers.trees.RandomForest;
 
 public class RunOneROCCurve
 {
+	// run on the cluster like this:
+	//  java -cp .:/users/afodor/gitInstall/WekaExamples/weka.jar examples.RunOneROCCurve
 	public static void main(String[] args) throws Exception
 	{
 		long startTime = System.currentTimeMillis();
