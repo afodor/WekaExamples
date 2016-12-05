@@ -11,7 +11,9 @@ public abstract class AbstractProjectDescription
 	
 	public String getArffMergedFileFromRDP(String taxa) throws Exception
 	{
-		String baseFile = getArffIndiviudalFileFromRDP(taxa).replaceAll(".arff", "");
+		
+		String baseFile = getArffIndiviudalFileFromRDP(taxa);
+		baseFile = baseFile.substring(0, baseFile.lastIndexOf(".arff") );
 		return baseFile + "allMerged.arff";
 	}
 }
