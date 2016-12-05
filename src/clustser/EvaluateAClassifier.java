@@ -10,10 +10,10 @@ import examples.TestClassify;
 import projectDescriptors.AbstractProjectDescription;
 import weka.classifiers.Classifier;
 
-public class CompareClassifiers
+public class EvaluateAClassifier
 {
 	private static final File OUTPUT_DIR = 
-			new File("/nobackup/afodor_research/arffMerged/crossOut");
+			new File("/nobackup/afodor_research/arffMerged/eachClassifierOut");
 	
 	public static void main(String[] args) throws Exception
 	{
