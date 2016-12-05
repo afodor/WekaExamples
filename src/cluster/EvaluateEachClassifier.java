@@ -1,4 +1,4 @@
-package clustser;
+package cluster;
 
 import java.io.BufferedWriter;
 import java.io.File;

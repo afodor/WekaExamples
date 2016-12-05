@@ -1,4 +1,4 @@
-package clustser;
+package cluster;
 
 import java.awt.Color;
 import java.io.BufferedWriter;
