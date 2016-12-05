@@ -13,6 +13,7 @@ import examples.TestClassify;
 import parsers.NewRDPParserFileLine;
 import projectDescriptors.AbstractProjectDescription;
 import utils.ConfigReader;
+import weka.classifiers.rules.OneR;
 import weka.classifiers.trees.RandomForest;
 import weka.gui.visualize.ThresholdVisualizePanel;
 
@@ -21,6 +22,7 @@ public class RunAllClassifiers
 	private static void writeResults(String taxa, HashMap<String, List<Double>> results) 
 				throws Exception
 	{
+		System.out.println( "allProjects_" + taxa + ".txt");
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 			ConfigReader.getMergedArffDir() + File.separator + "allProjects_" + taxa + ".txt"	)));
 		
@@ -66,23 +68,30 @@ public class RunAllClassifiers
 			{
 				File inArff= new File(apd.getArffMergedFileFromRDP(taxa));
 
-				ThresholdVisualizePanel tvp = TestClassify.getVisPanel(
-					apd.getProjectName() + " " + taxa	);
+				//ThresholdVisualizePanel tvp = TestClassify.getVisPanel(
+					//apd.getProjectName() + " " + taxa	);
 				
 				String unScrambled = apd.getProjectName();
 				String scrambled= apd.getProjectName() + "_" +"_scrambled";
+				String oneR = apd.getProjectName() + "_" +"_oneR";
 				
-				if( resultsMap.containsKey(unScrambled) || resultsMap.containsKey(scrambled))
+				if( resultsMap.containsKey(unScrambled) || resultsMap.containsKey(scrambled)
+							|| resultsMap.containsKey(oneR))
 					throw new Exception("duplicate");
 				
 				resultsMap.put(unScrambled, 
 				TestClassify.plotRocUsingMultithread(
-					inArff, numPermutations, false, tvp, new RandomForest().getClass().getName(), 
+					inArff, numPermutations, false, null, new RandomForest().getClass().getName(), 
+						Color.BLACK));
+				
+				resultsMap.put(oneR, 
+				TestClassify.plotRocUsingMultithread(
+					inArff, numPermutations, false, null, new OneR().getClass().getName(), 
 						Color.BLACK));
 				
 				resultsMap.put(scrambled, 
 						TestClassify.plotRocUsingMultithread(
-							inArff, numPermutations, true, tvp, new RandomForest().getClass().getName(), 
+							inArff, numPermutations, true, null, new RandomForest().getClass().getName(), 
 								Color.RED));
 			}	
 			
