@@ -346,7 +346,7 @@ public class TestClassify
 				Evaluation ev = new Evaluation(data);
 				
 				ev.crossValidateModel(classifier, data, 10, random);
-				resultsList.add(ev.areaUnderPRC(0));
+				resultsList.add(ev.areaUnderROC(0));
 				
 				if( tvp != null)
 					addROC(ev,tvp, plotColor);
@@ -418,8 +418,8 @@ public class TestClassify
 			ev.crossValidateModel(classifier, data, 10, random);
 			//System.out.println(ev.toSummaryString("\nResults\n\n", false));
 			//System.out.println(x + " " + ev.areaUnderROC(0) + " " + ev.pctCorrect());
-			areaUnderCurve.add(ev.areaUnderPRC(0));
-			System.out.println(x + " " + ev.areaUnderPRC(0));
+			areaUnderCurve.add(ev.areaUnderROC(0));
+			System.out.println(x + " " + ev.areaUnderROC(0));
 			
 			if( tvp != null)
 				addROC(ev,tvp, scramble ? Color.red: nonScrambleColor);

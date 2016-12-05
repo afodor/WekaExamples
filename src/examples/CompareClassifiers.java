@@ -8,6 +8,7 @@ import java.util.List;
 
 import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.functions.SMO;
+import weka.classifiers.rules.OneR;
 import weka.classifiers.trees.RandomForest;
 import weka.gui.visualize.ThresholdVisualizePanel;
 
@@ -19,7 +20,7 @@ public class CompareClassifiers
 		// this file is at 
 		//https://github.com/afodor/afodor.github.io/blob/master/classes/prog2016/pivoted_genusLogNormalWithMetadata.arff
 		File inArff= new File(
-				"C:\\Users\\corei7\\git\\afodor.github.io\\classes\\prog2016\\pivoted_genusLogNormalWithMetadata.arff");
+				"C:\\Users\\afodor\\git\\afodor.github.io\\classes\\prog2016\\pivoted_genusLogNormalWithMetadata.arff");
 				
 		ThresholdVisualizePanel tvp = TestClassify.getVisPanel(inArff.getName());
 		
@@ -36,7 +37,7 @@ public class CompareClassifiers
 		List<Double> naiveBayes=  TestClassify.plotRocUsingMultithread(inArff, numPermutations, false, tvp,
 						NaiveBayes.class.getName(), Color.blue);
 		List<Double> oneR=  TestClassify.plotRocUsingMultithread(inArff, numPermutations, false, tvp,
-				NaiveBayes.class.getName(), Color.red);
+				OneR.class.getName(), Color.red);
 	
 		
 		for(int x=0; x < numPermutations; x++)
