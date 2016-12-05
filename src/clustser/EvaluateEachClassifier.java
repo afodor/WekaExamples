@@ -11,6 +11,11 @@ import metaMergers.BringIntoOneNameSpace;
 import parsers.NewRDPParserFileLine;
 import projectDescriptors.AbstractProjectDescription;
 import weka.classifiers.Classifier;
+import weka.classifiers.bayes.BayesNet;
+import weka.classifiers.meta.AdaBoostM1;
+import weka.classifiers.meta.AdditiveRegression;
+import weka.classifiers.meta.AttributeSelectedClassifier;
+import weka.classifiers.meta.Bagging;
 import weka.classifiers.rules.OneR;
 import weka.classifiers.trees.RandomForest;
 
@@ -29,7 +34,11 @@ public class EvaluateEachClassifier
 		
 		list.add(new RandomForest());
 		list.add(new OneR());
-		
+		list.add(new AdaBoostM1());
+		list.add(new AdditiveRegression());
+		list.add(new AttributeSelectedClassifier());
+		list.add(new Bagging());
+		list.add(new BayesNet());
 		return list;
 	}
 	
