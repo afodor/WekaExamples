@@ -58,7 +58,7 @@ public class EvaluateEachClassifier
 			{
 				String taxa = NewRDPParserFileLine.TAXA_ARRAY[x];
 				
-				BufferedWriter aWriter = writerMap.get(x);
+				BufferedWriter aWriter = writerMap.get(index);
 				
 				aWriter.write("java -cp " + CLASSPATH_STRING + 
 						"cluster.EvaluateAClassifier " + apd.getClass().getName() + " " + 
