@@ -2,15 +2,15 @@
 	
 	setwd("C:\\ArffMerged")
 	
-	#taxa <- c("phylum", "class", "order", "family", "genus")
-	taxa <- c("family")
+	taxa <- c("phylum", "class", "order", "family", "genus")
+	taxa <- c("genus")
 	
 	
 	for( t in taxa) 
 	{
 		par(mfrow=c(5,4))
 		normTests <- vector()
-		inFileName <- paste( "cross_" ,t, ".txt", sep="")
+		inFileName <- paste( "cross_" ,t, "BayesNet.txt", sep="")
 		myT <- read.table(inFileName, sep="\t", header=TRUE)
 		
 		for(i in 3:ncol(myT))

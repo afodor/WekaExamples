@@ -19,7 +19,7 @@ import projectDescriptors.AbstractProjectDescription;
 import utils.ConfigReader;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
-import weka.classifiers.trees.RandomForest;
+import weka.classifiers.bayes.BayesNet;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.gui.visualize.ThresholdVisualizePanel;
@@ -54,7 +54,7 @@ public class RunCrossClassifiers
 						
 						File trainFile =new File(xProject.getArffMergedFileFromRDP(taxa));
 						File testFile = new File(yProject.getArffMergedFileFromRDP(taxa));
-						String classifierName = new RandomForest().getClass().getName();
+						String classifierName = new BayesNet().getClass().getName();
 						
 						results.addAll(getPercentCorrect(trainFile, testFile, 1, false, tvp, classifierName, Color.RED));
 						results.addAll(getPercentCorrect(trainFile, testFile, 2000, true, tvp, classifierName, Color.BLACK));
@@ -68,7 +68,7 @@ public class RunCrossClassifiers
 		throws Exception
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
-			ConfigReader.getMergedArffDir() + File.separator + "cross_" + level + ".txt"	)));
+			ConfigReader.getMergedArffDir() + File.separator + "cross_" + level + "BayesNet.txt"	)));
 		
 		writer.write( "count\tisScrambled"  );
 		
