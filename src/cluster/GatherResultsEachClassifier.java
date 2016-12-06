@@ -63,6 +63,20 @@ public class GatherResultsEachClassifier
 		writer.flush();  writer.close();
 	}
 	
+	private static int getNumLines(File file ) throws Exception
+	{
+		int i =0;
+		
+		BufferedReader reader = new BufferedReader(new FileReader(file));
+		
+		for(String s= reader.readLine();s != null; s= reader.readLine())
+			i++;
+		
+		reader.close();
+		
+		return i;
+	}
+	
 	private static HashMap<String, Holder> getResultsForALevel(String level) throws Exception
 	{
 		HashMap<String, Holder>  map = new HashMap<String,Holder>();
@@ -73,32 +87,42 @@ public class GatherResultsEachClassifier
 		{
 			if( s.indexOf(level + ".txt") != -1)
 			{
+				
 				File file = new File(EvaluateAClassifier.OUTPUT_DIR.getAbsolutePath() + File.separator + s);
-				BufferedReader reader = new BufferedReader(new FileReader(file));
 				
-				s = s.replace(level + ".txt", "").replace("projectDescriptors.", "")
-						.replace("ProjectDescriptor", "");
-				
-				if(map.containsKey(s))
-					throw new Exception("Duplicate key " + s);
-				
-				Holder h =new Holder();
-				map.put(s,h);
-				
-				reader.readLine();
-				
-				for( String s2 = reader.readLine(); s2 != null; s2= reader.readLine())
+				if( getNumLines(file)!= EvaluateEachClassifier.numPermutations + 1)
 				{
-					String[] splits =s2.split("\t");
-					
-					if( splits.length != 2)
-						throw new Exception("Parsing error");
-					
-					h.notScrambled.add(Double.parseDouble(splits[0]));
-					h.scrambled.add(Double.parseDouble(splits[1]));
+					System.out.println("Expecting " +  (EvaluateEachClassifier.numPermutations + 1) + 
+							" but got "  + getNumLines(file) + " skipping " + file.getAbsolutePath() );
 				}
-				
-				reader.close();			
+				else
+				{
+					BufferedReader reader = new BufferedReader(new FileReader(file));
+					
+					s = s.replace(level + ".txt", "").replace("projectDescriptors.", "")
+							.replace("ProjectDescriptor", "");
+					
+					if(map.containsKey(s))
+						throw new Exception("Duplicate key " + s);
+					
+					Holder h =new Holder();
+					map.put(s,h);
+					
+					reader.readLine();
+					
+					for( String s2 = reader.readLine(); s2 != null; s2= reader.readLine())
+					{
+						String[] splits =s2.split("\t");
+						
+						if( splits.length != 2)
+							throw new Exception("Parsing error");
+						
+						h.notScrambled.add(Double.parseDouble(splits[0]));
+						h.scrambled.add(Double.parseDouble(splits[1]));
+					}
+					
+					reader.close();			
+				}
 			}
 		}
 		

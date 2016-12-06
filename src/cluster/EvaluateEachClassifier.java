@@ -23,8 +23,8 @@ import weka.classifiers.trees.RandomForest;
 public class EvaluateEachClassifier
 {
 	public static final String SCRIPT_DIR = "/nobackup/afodor_research/arffMerged/scripts/evaluteEachClassifier";
-	private final static int numNodes = 50;
-	private final static int numPermutations = 100;
+	public final static int numNodes = 50;
+	public final static int numPermutations = 100;
 	
 	private static final String CLASSPATH_STRING = 
 			"/users/afodor/gitInstall/WekaExamples/bin:/users/afodor/gitInstall/WekaExamples/weka.jar";
