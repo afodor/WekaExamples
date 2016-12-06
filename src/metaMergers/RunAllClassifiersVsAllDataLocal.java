@@ -58,7 +58,7 @@ public class RunAllClassifiersVsAllDataLocal
 				
 				if( ! outFile.exists())
 				{
-					
+					long startTime = System.currentTimeMillis();
 					File inFile = new File( apd.getArffMergedFileFromRDP(taxa));
 					
 					// single-threaded because memory is constraining on the cluster
@@ -77,6 +77,7 @@ public class RunAllClassifiersVsAllDataLocal
 						writer.write(unscrambled.get(y) + "\t" + scrambled.get(y) + "\n");
 					
 					writer.flush();  writer.close();
+					System.out.println("\tfinished " + (System.currentTimeMillis() - startTime) / 1000f + " seconds ");
 					
 				}
 			}
