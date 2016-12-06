@@ -6,28 +6,29 @@ allClass <- sort( unique(myT$classifier))
 
 allDataset <- sort( unique(myT$dataset))
 
+numPermutations = length(myT$roc[myT$classifier==allClass[1] & myT$dataset == allDataset[1] & myT$scrambed=="false"])
+
 for( d in allDataset ) 
 {
+	collectedData<- list()
 	index <- 1
-	colIndex <- 1
-	boxplot( myT$roc[myT$classifier==allClass[index] & myT$dataset == d & myT$scrambed=="true"],
-					main = d )
+	classIndex <-1 
+		
 	
-	colIndex <- colIndex + 1
-	boxplot( myT$roc[myT$classifier==allClass[1] & myT$dataset == d & myT$scrambed=="false"],
-						add= TRUE, col=colIndex )
-					
-	for( c in classifier ) 
+	for( c in allClass ) 
 	{
+		collectedData[[index]] <-
+		 myT$roc[myT$classifier==allClass[classIndex] & myT$dataset == d & myT$scrambed=="false"]
+		
 		index <- index + 1
 		
-		boxplot( myT$roc[myT$classifier==allClass[index] & myT$dataset == d & myT$scrambed=="true"],
-					  add= TRUE, col=colIndex)
-	
-		colIndex <- colIndex + 1
-		boxplot( myT$roc[myT$classifier==allClass[1] & myT$dataset == d & myT$scrambed=="false"],
-						add= TRUE, col=colIndex)
+		collectedData[[index]] <-
+		 myT$roc[myT$classifier==allClass[classIndex] & myT$dataset == d & myT$scrambed=="true"]
+		
+		classIndex <- index + 1	
 	}
+	
+	boxplot(collectedData)
 	
 	windows() 
 }
