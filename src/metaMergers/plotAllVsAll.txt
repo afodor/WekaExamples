@@ -14,7 +14,6 @@ for( d in allDataset )
 	index <- 1
 	classIndex <-1 
 		
-	
 	for( c in allClass ) 
 	{
 		collectedData[[index]] <-
@@ -25,10 +24,11 @@ for( d in allDataset )
 		collectedData[[index]] <-
 		 myT$roc[myT$classifier==allClass[classIndex] & myT$dataset == d & myT$scrambed=="true"]
 		
-		classIndex <- index + 1	
+		index <- index + 1
+		classIndex <- classIndex+ 1	
 	}
 	
-	boxplot(collectedData)
+	boxplot(collectedData,main=d)
 	
 	windows() 
 }
