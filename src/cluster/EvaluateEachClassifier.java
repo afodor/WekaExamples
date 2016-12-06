@@ -12,8 +12,9 @@ import parsers.NewRDPParserFileLine;
 import projectDescriptors.AbstractProjectDescription;
 import weka.classifiers.Classifier;
 import weka.classifiers.bayes.BayesNet;
+import weka.classifiers.bayes.NaiveBayes;
+import weka.classifiers.functions.SMO;
 import weka.classifiers.meta.AdaBoostM1;
-import weka.classifiers.meta.AdditiveRegression;
 import weka.classifiers.meta.AttributeSelectedClassifier;
 import weka.classifiers.meta.Bagging;
 import weka.classifiers.rules.OneR;
@@ -34,8 +35,10 @@ public class EvaluateEachClassifier
 		
 		list.add(new RandomForest());
 		list.add(new OneR());
+		list.add(new NaiveBayes());
+		list.add(new SMO());
 		list.add(new AdaBoostM1());
-		list.add(new AdditiveRegression());
+		//list.add(new AdditiveRegression());
 		list.add(new AttributeSelectedClassifier());
 		list.add(new Bagging());
 		list.add(new BayesNet());

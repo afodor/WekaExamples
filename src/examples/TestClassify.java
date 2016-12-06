@@ -419,7 +419,7 @@ public class TestClassify
 			//System.out.println(ev.toSummaryString("\nResults\n\n", false));
 			//System.out.println(x + " " + ev.areaUnderROC(0) + " " + ev.pctCorrect());
 			areaUnderCurve.add(ev.areaUnderROC(0));
-			System.out.println(x + " " + ev.areaUnderROC(0));
+			//System.out.println(x + " " + ev.areaUnderROC(0));
 			
 			if( tvp != null)
 				addROC(ev,tvp, scramble ? Color.red: nonScrambleColor);

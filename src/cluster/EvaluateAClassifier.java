@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.List;
+import java.util.Random;
 
 import examples.TestClassify;
 import projectDescriptors.AbstractProjectDescription;
@@ -36,13 +37,15 @@ public class EvaluateAClassifier
 		if(! inputFile.exists())
 			throw new Exception("Could not find " + inputFile.getAbsolutePath());
 		
+		// single-threaded because memory is constraining on the cluster
 		List<Double> unscrambled= 
-				TestClassify.plotRocUsingMultithread(inputFile, numPermutations, false, null,
-				classifier.getClass().getName(), Color.green);
+				TestClassify.plotROCForAnArff( inputFile, numPermutations, new Random(1), false, 
+						null, classifier, Color.black);
 		
-		List<Double> scrambled= TestClassify.plotRocUsingMultithread(inputFile, 
-				numPermutations, true, null,
-						classifier.getClass().getName(), Color.black);
+		List<Double> scrambled=TestClassify.plotROCForAnArff( 
+				inputFile, numPermutations, new Random(1), true, 
+				null, classifier, Color.black);
+		
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 				OUTPUT_DIR + File.separator + 
