@@ -24,6 +24,7 @@ public class GatherResultsEachClassifier
 			
 			HashMap<String, Holder> map =getResultsForALevel(taxa);
 			writeResults(map, taxa);
+			writeSkinnyColumns(map, taxa);
 		}
 	}
 	
@@ -31,6 +32,43 @@ public class GatherResultsEachClassifier
 	{
 		List<Double> notScrambled = new ArrayList<Double>();
 		List<Double> scrambled = new ArrayList<Double>();
+	}
+	
+	private static void writeSkinnyColumns( HashMap<String, Holder> map, String level) throws Exception
+	{
+		
+		List<String> list = new ArrayList<String>(map.keySet());
+		Collections.sort(list);
+		
+		if( list.size() > 0 ) for(String s : list)
+		{
+			BufferedWriter writer = new BufferedWriter(new FileWriter( ConfigReader.getMergedArffDir()
+					+ File.separator + 
+					"spreasheetsLocal" + File.separator + "allClassifiers_" + level + "_skinny.txt"));
+			
+			writer.write("dataset\tclassifier\tscrambed\troc\n");
+			
+			
+			Holder h = map.get(s);
+			
+			while(s.endsWith("_"))
+				s= s.substring(0, s.length()-1);
+			
+			int index = s.lastIndexOf("_");
+			String dataset = s.substring(0, index);
+			String classifier = s.substring(index, s.length());
+			
+			while(dataset.endsWith("_"))
+				dataset= dataset.substring(0, dataset.length()-1);
+			
+			for( int x=0;x < RunAllClassifiersVsAllDataLocal.NUM_PERMUTATIONS; x++)
+			{
+				writer.write(dataset + "\t" + classifier + "\t" + "false\t" +  h.notScrambled.get(x) + "\n");
+				writer.write(dataset + "\t" + classifier + "\t" + "true\t" + h.scrambled.get(x) + "\n");
+			}
+			
+			writer.flush();  writer.close();
+		}
 	}
 	
 	private static void writeResults( HashMap<String, Holder> map, String level) throws Exception
