@@ -1,0 +1,33 @@
+setwd("C:\\ArffMerged\\spreasheetsLocal")
+
+myT <- read.table("allClassifiers_genus_skinny.txt", sep="\t", header=TRUE)
+
+allClass <- sort( unique(myT$classifier))
+
+allDataset <- sort( unique(myT$dataset))
+
+for( d in allDataset ) 
+{
+	index <- 1
+	colIndex <- 1
+	boxplot( myT$roc[myT$classifier==allClass[index] & myT$dataset == d & myT$scrambed=="true"],
+					main = d )
+	
+	colIndex <- colIndex + 1
+	boxplot( myT$roc[myT$classifier==allClass[1] & myT$dataset == d & myT$scrambed=="false"],
+						add= TRUE, col=colIndex )
+					
+	for( c in classifier ) 
+	{
+		index <- index + 1
+		
+		boxplot( myT$roc[myT$classifier==allClass[index] & myT$dataset == d & myT$scrambed=="true"],
+					  add= TRUE, col=colIndex)
+	
+		colIndex <- colIndex + 1
+		boxplot( myT$roc[myT$classifier==allClass[1] & myT$dataset == d & myT$scrambed=="false"],
+						add= TRUE, col=colIndex)
+	}
+	
+	windows() 
+}

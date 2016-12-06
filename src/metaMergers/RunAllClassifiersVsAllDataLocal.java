@@ -53,7 +53,7 @@ public class RunAllClassifiersVsAllDataLocal
 		list.add(new BayesNetGenerator());
 		list.add(new BIFReader());
 		list.add(new ClassificationViaRegression());
-		list.add(new CostSensitiveClassifier());
+		//list.add(new CostSensitiveClassifier());
 		list.add(new CVParameterSelection());
 		list.add(new DecisionStump());
 		list.add(new DecisionTable());

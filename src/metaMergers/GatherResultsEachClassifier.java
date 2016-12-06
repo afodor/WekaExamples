@@ -58,6 +58,9 @@ public class GatherResultsEachClassifier
 				String dataset = s.substring(0, index);
 				String classifier = s.substring(index, s.length());
 				
+				while(classifier.startsWith("_"))
+					classifier = classifier.substring(1);
+				
 				while(dataset.endsWith("_"))
 					dataset= dataset.substring(0, dataset.length()-1);
 				
