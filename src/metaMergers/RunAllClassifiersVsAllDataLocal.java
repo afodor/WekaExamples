@@ -13,11 +13,24 @@ import utils.ConfigReader;
 import weka.classifiers.Classifier;
 import weka.classifiers.bayes.BayesNet;
 import weka.classifiers.bayes.NaiveBayes;
+import weka.classifiers.bayes.net.BIFReader;
+import weka.classifiers.bayes.net.BayesNetGenerator;
+import weka.classifiers.bayes.net.EditableBayesNet;
+import weka.classifiers.functions.GaussianProcesses;
 import weka.classifiers.functions.SMO;
+import weka.classifiers.lazy.IBk;
 import weka.classifiers.meta.AdaBoostM1;
 import weka.classifiers.meta.AttributeSelectedClassifier;
 import weka.classifiers.meta.Bagging;
+import weka.classifiers.meta.CVParameterSelection;
+import weka.classifiers.meta.ClassificationViaRegression;
+import weka.classifiers.meta.CostSensitiveClassifier;
+import weka.classifiers.meta.FilteredClassifier;
+import weka.classifiers.misc.InputMappedClassifier;
+import weka.classifiers.rules.DecisionTable;
 import weka.classifiers.rules.OneR;
+import weka.classifiers.trees.DecisionStump;
+import weka.classifiers.trees.HoeffdingTree;
 import weka.classifiers.trees.RandomForest;
 
 public class RunAllClassifiersVsAllDataLocal
@@ -37,6 +50,19 @@ public class RunAllClassifiersVsAllDataLocal
 		list.add(new AttributeSelectedClassifier());
 		list.add(new Bagging());
 		list.add(new BayesNet());
+		list.add(new BayesNetGenerator());
+		list.add(new BIFReader());
+		list.add(new ClassificationViaRegression());
+		list.add(new CostSensitiveClassifier());
+		list.add(new CVParameterSelection());
+		list.add(new DecisionStump());
+		list.add(new DecisionTable());
+		list.add(new EditableBayesNet());
+		list.add(new FilteredClassifier());
+		list.add(new GaussianProcesses());
+		list.add(new HoeffdingTree());
+		list.add(new IBk());
+		list.add(new InputMappedClassifier());
 		return list;
 	}
 	
