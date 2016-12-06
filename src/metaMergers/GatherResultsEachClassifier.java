@@ -108,7 +108,9 @@ public class GatherResultsEachClassifier
 					BufferedReader reader = new BufferedReader(new FileReader(file));
 					
 					s = s.replace(level + ".txt", "").replace("projectDescriptors.", "")
-							.replace("ProjectDescriptor", "");
+							.replace("ProjectDescriptor", "").replace("weka.classifiers.meta.", "").
+							replace("weka.classifiers.rules.", "").replace("weka.classifiers.trees.", "")
+							.replace("weka.classifiers.bayes.", "").replace("weka.classifiers.functions.", "");
 					
 					if(map.containsKey(s))
 						throw new Exception("Duplicate key " + s);
