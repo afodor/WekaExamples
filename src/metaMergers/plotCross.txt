@@ -3,7 +3,7 @@
 	setwd("C:\\ArffMerged")
 	
 	#taxa <- c("phylum", "class", "order", "family", "genus")
-	taxa <- c("order")
+	taxa <- c("family")
 	
 	
 	for( t in taxa) 
