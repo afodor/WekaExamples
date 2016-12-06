@@ -52,8 +52,8 @@ public class RunAllClassifiersVsAllDataLocal
 			{
 				String taxa = NewRDPParserFileLine.TAXA_ARRAY[x];
 				File outFile = new File(ConfigReader.getMergedArffDir() + File.separator + 
-						"allVsallMerged" + File.separator + taxa + "_" + 
-						apd.getClass().getName() + "_" + c.getClass().getName() + ".txt" );
+						"allVsallMerged" + File.separator + 
+						apd.getClass().getName() + "_" + c.getClass().getName() + "_" + taxa +".txt" );
 				System.out.println(outFile.getAbsolutePath());
 				
 				if( ! outFile.exists())
