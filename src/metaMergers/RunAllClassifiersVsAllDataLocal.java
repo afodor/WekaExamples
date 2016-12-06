@@ -50,14 +50,15 @@ public class RunAllClassifiersVsAllDataLocal
 			for( int x=NewRDPParserFileLine.TAXA_ARRAY.length -1; 
 							x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
 			{
+				String taxa = NewRDPParserFileLine.TAXA_ARRAY[x];
 				File outFile = new File(ConfigReader.getMergedArffDir() + File.separator + 
+						"allVsallMerged" + File.separator + taxa + "_" + 
 						apd.getClass().getName() + "_" + c.getClass().getName() + ".txt" );
 				System.out.println(outFile.getAbsolutePath());
 				
 				if( ! outFile.exists())
 				{
-
-					String taxa = NewRDPParserFileLine.TAXA_ARRAY[x];
+					
 					File inFile = new File( apd.getArffMergedFileFromRDP(taxa));
 					
 					// single-threaded because memory is constraining on the cluster
