@@ -36,11 +36,10 @@ public class GatherResultsEachClassifier
 	
 	private static void writeSkinnyColumns( HashMap<String, Holder> map, String level) throws Exception
 	{
-		
 		List<String> list = new ArrayList<String>(map.keySet());
 		Collections.sort(list);
 		
-		if( list.size() > 0 ) for(String s : list)
+		if( list.size() > 0 )
 		{
 			BufferedWriter writer = new BufferedWriter(new FileWriter( ConfigReader.getMergedArffDir()
 					+ File.separator + 
@@ -48,25 +47,27 @@ public class GatherResultsEachClassifier
 			
 			writer.write("dataset\tclassifier\tscrambed\troc\n");
 			
-			
-			Holder h = map.get(s);
-			
-			while(s.endsWith("_"))
-				s= s.substring(0, s.length()-1);
-			
-			int index = s.lastIndexOf("_");
-			String dataset = s.substring(0, index);
-			String classifier = s.substring(index, s.length());
-			
-			while(dataset.endsWith("_"))
-				dataset= dataset.substring(0, dataset.length()-1);
-			
-			for( int x=0;x < RunAllClassifiersVsAllDataLocal.NUM_PERMUTATIONS; x++)
+			for(String s : list)
 			{
-				writer.write(dataset + "\t" + classifier + "\t" + "false\t" +  h.notScrambled.get(x) + "\n");
-				writer.write(dataset + "\t" + classifier + "\t" + "true\t" + h.scrambled.get(x) + "\n");
+				Holder h = map.get(s);
+				
+				while(s.endsWith("_"))
+					s= s.substring(0, s.length()-1);
+				
+				int index = s.lastIndexOf("_");
+				String dataset = s.substring(0, index);
+				String classifier = s.substring(index, s.length());
+				
+				while(dataset.endsWith("_"))
+					dataset= dataset.substring(0, dataset.length()-1);
+				
+				for( int x=0;x < RunAllClassifiersVsAllDataLocal.NUM_PERMUTATIONS; x++)
+				{
+					writer.write(dataset + "\t" + classifier + "\t" + "false\t" +  h.notScrambled.get(x) + "\n");
+					writer.write(dataset + "\t" + classifier + "\t" + "true\t" + h.scrambled.get(x) + "\n");
+				}
 			}
-			
+				
 			writer.flush();  writer.close();
 		}
 	}
