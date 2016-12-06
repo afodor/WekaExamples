@@ -16,20 +16,27 @@ import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.bayes.net.BIFReader;
 import weka.classifiers.bayes.net.BayesNetGenerator;
 import weka.classifiers.bayes.net.EditableBayesNet;
+import weka.classifiers.functions.Logistic;
 import weka.classifiers.functions.SMO;
 import weka.classifiers.lazy.IBk;
+import weka.classifiers.lazy.KStar;
 import weka.classifiers.meta.AdaBoostM1;
 import weka.classifiers.meta.AttributeSelectedClassifier;
 import weka.classifiers.meta.Bagging;
 import weka.classifiers.meta.CVParameterSelection;
 import weka.classifiers.meta.ClassificationViaRegression;
 import weka.classifiers.meta.FilteredClassifier;
+import weka.classifiers.meta.LogitBoost;
 import weka.classifiers.misc.InputMappedClassifier;
 import weka.classifiers.rules.DecisionTable;
+import weka.classifiers.rules.JRip;
 import weka.classifiers.rules.OneR;
 import weka.classifiers.trees.DecisionStump;
 import weka.classifiers.trees.HoeffdingTree;
+import weka.classifiers.trees.J48;
+import weka.classifiers.trees.LMT;
 import weka.classifiers.trees.RandomForest;
+import weka.classifiers.trees.lmt.LogisticBase;
 
 public class RunAllClassifiersVsAllDataLocal
 {
@@ -61,6 +68,14 @@ public class RunAllClassifiersVsAllDataLocal
 		list.add(new HoeffdingTree());
 		list.add(new IBk());
 		list.add(new InputMappedClassifier());
+		list.add(new J48());
+		list.add(new JRip());
+		list.add(new KStar());
+		//list.add(new LinearRegression());
+		list.add(new LMT());
+		list.add(new Logistic());
+		list.add(new LogisticBase());
+		list.add(new LogitBoost());
 		return list;
 	}
 	
