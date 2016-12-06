@@ -22,7 +22,7 @@ import weka.classifiers.trees.RandomForest;
 
 public class RunAllClassifiersVsAllDataLocal
 {
-	public static final int NUM_PERMUTATIONS = 100;
+	public static final int NUM_PERMUTATIONS = 25;
 	
 	public static List<Classifier> getClassifiers() throws Exception
 	{
