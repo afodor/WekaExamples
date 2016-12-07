@@ -24,12 +24,12 @@ for( d in allDataset )
 		
 		index <- index + 1
 		
-		collectedData[[index]] <-
-		 myT$roc[myT$classifier==allClass[classIndex] & myT$dataset == d & myT$scrambed=="true"]
+	#	collectedData[[index]] <-
+	#	 myT$roc[myT$classifier==allClass[classIndex] & myT$dataset == d & myT$scrambed=="true"]
 		 
-		 cNames[index] = paste( "",sep="")
+	#	 cNames[index] = paste( "",sep="")
 		
-		index <- index + 1
+	#	index <- index + 1
 		classIndex <- classIndex+ 1	
 	
 	}

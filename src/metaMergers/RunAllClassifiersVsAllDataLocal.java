@@ -72,7 +72,7 @@ public class RunAllClassifiersVsAllDataLocal
 		list.add(new JRip());
 		list.add(new KStar());
 		//list.add(new LinearRegression());
-		list.add(new LMT());
+		//list.add(new LMT());
 		list.add(new Logistic());
 		list.add(new LogisticBase());
 		list.add(new LogitBoost());
