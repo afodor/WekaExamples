@@ -71,7 +71,7 @@ public class RunAllClassifiers
 		int numPermutations = 50;
 		List<AbstractProjectDescription> projects = getAllProjects();
 		
-		for( int x=1 ; x < TAXA_ARRAY.length; x++)
+		for( int x=0; x < TAXA_ARRAY.length; x++)
 		{
 
 			HashMap<String, List<Double>> resultsMap = new LinkedHashMap<String,List<Double>>();
@@ -99,7 +99,7 @@ public class RunAllClassifiers
 				
 				resultsMap.put(oneR, 
 				TestClassify.plotRocUsingMultithread(
-					inArff, numPermutations, true, tvp, new OneR().getClass().getName(), 
+					inArff, numPermutations, false, tvp, new OneR().getClass().getName(), 
 						Color.GREEN));
 				
 				resultsMap.put(scrambled, 
