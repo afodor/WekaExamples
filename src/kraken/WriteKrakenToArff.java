@@ -71,21 +71,31 @@ public class WriteKrakenToArff
 			s = s.replaceAll("\"", "");
 			String[] splits = s.split("\t");
 			
-			if( splits.length != topSplits.length)
-				throw new Exception("Parsing error!");
+			if( apb.getNegativeClassifications().contains(splits[1]) ||  
+					 apb.getPositiveClassifications().contains(splits[1]))
+			{
+
+				if( splits.length != topSplits.length)
+					throw new Exception("Parsing error!");
+				
+				
+				for( int y=0; y < splits.length; y++)
+				{ 
+					if( y>=2 )
+						writer.write( splits[y] + ",");
+				}
 			
-			
-			for( int y=0; y < splits.length; y++)
-			{ 
-				if( y>=2 )
-					writer.write( splits[y] + ",");
+				if( apb.getNegativeClassifications().contains(splits[1]))
+					writer.write("false\n");
+				else if( apb.getPositiveClassifications().contains(splits[1]))
+					writer.write("true\n");
+				else throw new Exception("Logic error");
 			}
-		
-			if( apb.getNegativeClassifications().contains(splits[1]))
-				writer.write("false\n");
-			else if( apb.getPositiveClassifications().contains(splits[1]))
-				writer.write("true\n");
-			else System.out.println("Skipping " + splits[1]);
+			else
+			{
+				System.out.println("Skipping " + splits[0]);
+			}
+			
 		}
 		
 		writer.flush();  writer.close();

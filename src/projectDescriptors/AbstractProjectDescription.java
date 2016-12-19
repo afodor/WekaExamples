@@ -26,9 +26,16 @@ public abstract class AbstractProjectDescription
 	
 	public String getLogNormalizedArffFromKraken(String taxa) throws Exception
 	{
-		String baseFile = getLogNormalizedKrakenCounts(taxa);
+		String baseFile = getLogNormalizedKrakenCounts(taxa); 
 		baseFile = baseFile.substring(0, baseFile.lastIndexOf(".txt") );
 		return baseFile + "krakenLogNorm.arff";
+	}
+	
+	public String getLogNormalizedArffFromKrakenMergedNamedspace(String taxa) throws Exception
+	{
+		String baseFile = getLogNormalizedArffFromKraken(taxa);
+		baseFile = baseFile.substring(0, baseFile.lastIndexOf("krakenLogNorm.arff") );
+		return baseFile + "krakenLogNormMergedNamespace.arff";
 	}
 	
 	public HashSet<String> getPositiveClassifications()

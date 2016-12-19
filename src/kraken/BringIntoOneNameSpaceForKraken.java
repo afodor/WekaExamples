@@ -1,4 +1,4 @@
-package metaMergers;
+package kraken;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -12,37 +12,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import parsers.NewRDPParserFileLine;
 import projectDescriptors.AbstractProjectDescription;
-import projectDescriptors.Adenomas2012ProjectDescriptor;
-import projectDescriptors.Adenomas2015ProjectDescriptor;
-import projectDescriptors.China2015_Timepoint1;
-import projectDescriptors.China2015_Timepoint2;
-import projectDescriptors.Divitriculosis2015ProjectDescriptor;
 
-public class BringIntoOneNameSpace
+public class BringIntoOneNameSpaceForKraken
 {
-	public static List<AbstractProjectDescription> getAllProjects() throws Exception
-	{
-		List<AbstractProjectDescription> list = new ArrayList<AbstractProjectDescription>();
-		
-		list.add(new China2015_Timepoint1());
-		list.add(new China2015_Timepoint2());
-		list.add(new Adenomas2012ProjectDescriptor());
-		list.add(new Adenomas2015ProjectDescriptor());
-
-		list.add(new Divitriculosis2015ProjectDescriptor());
-		
-		return list;
-	}
-	
 	public static void main(String[] args) throws Exception
 	{
-		List<AbstractProjectDescription> projectList = getAllProjects();
+		List<AbstractProjectDescription> projectList = RunAllClassifiers.getAllProjects();
 		
-		for(int x=1;x  < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
-		writeMergedForOneLevel(projectList, NewRDPParserFileLine.TAXA_ARRAY[x]);
+			for(String taxa : RunAllClassifiers.TAXA_ARRAY)
+				writeMergedForOneLevel(projectList, taxa);
 	}
+	
 	
 	public static void writeMergedForOneLevel( List<AbstractProjectDescription> projects, String taxa)
 		throws Exception
@@ -60,9 +41,9 @@ public class BringIntoOneNameSpace
 		
 		for(AbstractProjectDescription apd : projects)
 		{
-			System.out.println(apd.getProjectName() + " " + taxa);
+			System.out.println(apd.getProjectName() + " " + taxa + " " + apd.getLogNormalizedArffFromKraken(taxa));
 			List<String> numericAttributes = getNumericAttributes(
-				new File(apd.getArffIndiviudalFileFromRDP(taxa)));
+				new File(apd.getLogNormalizedArffFromKraken(taxa)));
 			
 			HashMap<String, Integer> thisPositionMap = new HashMap<String,Integer>();
 			
@@ -80,10 +61,10 @@ public class BringIntoOneNameSpace
 				flipMap.put(thisPositionMap.get(s), s);
 			
 			BufferedReader reader = new BufferedReader(new FileReader(new File(
-				apd.getArffIndiviudalFileFromRDP(taxa)	)));
+				apd.getLogNormalizedArffFromKraken(taxa)	)));
 			
 			BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
-					apd.getArffMergedFileFromRDP(taxa))));
+					apd.getLogNormalizedArffFromKrakenMergedNamedspace(taxa))));
 			
 			writer.write(reader.readLine() + "\n");  // header comment line
 			writer.write(reader.readLine() + "\n");  // @relation
@@ -119,6 +100,7 @@ public class BringIntoOneNameSpace
 	private static String getNewLine(String oldLine, HashMap<Integer, String> flipMap,
 						HashMap<String, Integer> newPositionMap) throws Exception
 	{
+		System.out.println(oldLine);
 		double[] vals = new double[newPositionMap.size()];
 		
 		String[] splits = oldLine.split(",");
@@ -156,7 +138,7 @@ public class BringIntoOneNameSpace
 		
 		for(AbstractProjectDescription abd : projects)
 		{
-			set.addAll(getNumericAttributes( new File( abd.getArffIndiviudalFileFromRDP(level))));
+			set.addAll(getNumericAttributes( new File( abd.getLogNormalizedArffFromKraken(level))));
 		}
 		
 		List<String> list = new ArrayList<String>(set);
