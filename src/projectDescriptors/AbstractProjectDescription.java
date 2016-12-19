@@ -1,5 +1,7 @@
 package projectDescriptors;
 
+import java.util.HashSet;
+
 public abstract class AbstractProjectDescription
 {
 	abstract public String getProjectName();
@@ -28,4 +30,14 @@ public abstract class AbstractProjectDescription
 		baseFile = baseFile.substring(0, baseFile.lastIndexOf(".txt") );
 		return baseFile + "krakenLogNorm.arff";
 	}
+	
+	public HashSet<String> getPositiveClassifications()
+	{
+		return null;
+	}
+	public HashSet<String> getNegativeClassifications()
+	{
+		return null;
+	}
+	
 }

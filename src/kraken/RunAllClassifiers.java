@@ -12,6 +12,7 @@ import java.util.List;
 import examples.TestClassify;
 import projectDescriptors.AbstractProjectDescription;
 import projectDescriptors.IbdMetaHit;
+import projectDescriptors.CirrhosisQin;
 import utils.ConfigReader;
 import weka.classifiers.rules.OneR;
 import weka.classifiers.trees.RandomForest;
@@ -61,6 +62,7 @@ public class RunAllClassifiers
 	{
 		List<AbstractProjectDescription> list = new ArrayList<AbstractProjectDescription>();
 		
+		list.add( new CirrhosisQin());
 		list.add( new IbdMetaHit());
 		
 		return list;

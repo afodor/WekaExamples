@@ -5,10 +5,11 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.List;
 
-import projectDescriptors.IbdMetaHit;
+import projectDescriptors.AbstractProjectDescription;
 
-public class WriteToArffIbdMetahit
+public class WriteKrakenToArff
 {
 	private static int getNumSamples(File file) throws Exception
 	{
@@ -29,10 +30,12 @@ public class WriteToArffIbdMetahit
 	}
 	
 	
-	private static void write(File inFile, File outFile, String taxa)
+	public static void writeArffFromLogNormalKrakenCounts(AbstractProjectDescription apb, String taxa)
 		throws Exception
 	{
+		File inFile = new File(apb.getLogNormalizedKrakenCounts(taxa));
 		System.out.println(inFile.getAbsolutePath());
+		File outFile = new File(apb.getLogNormalizedArffFromKraken(taxa));
 		int numSamples = getNumSamples(inFile);
 		System.out.println("Got" + numSamples);
 		BufferedReader reader = new BufferedReader(new FileReader(inFile));
@@ -41,7 +44,7 @@ public class WriteToArffIbdMetahit
 		
 		writer.write("% " + taxa + "\n");
 		
-		writer.write("@relation " +  "metahit_IBD"+  "\n");
+		writer.write("@relation " + apb.getProjectName() +  "\n");
 		
 		String[] topSplits = reader.readLine().replaceAll("\"","").split("\t");
 		
@@ -74,9 +77,9 @@ public class WriteToArffIbdMetahit
 					writer.write( splits[y] + ",");
 			}
 		
-			if( splits[1].equals("n") )
+			if( apb.getNegativeClassifications().contains(splits[1]))
 				writer.write("false\n");
-			else if( splits[1].equals("ibd_ulcerative_colitis") || splits[1].equals("ibd_crohn_disease"))
+			else if( apb.getPositiveClassifications().contains(splits[1]))
 				writer.write("true\n");
 			else throw new Exception("Parsing error " + splits[1]);
 		}
@@ -89,19 +92,15 @@ public class WriteToArffIbdMetahit
 	
 	public static void main(String[] args) throws Exception
 	{
+		List<AbstractProjectDescription> list = RunAllClassifiers.getAllProjects();
 		
-		IbdMetaHit mh = new IbdMetaHit();
-		
-		for( int x=0; x < RunAllClassifiers.TAXA_ARRAY.length; x++)
+		for(AbstractProjectDescription apd : list)
 		{
-			String taxa = RunAllClassifiers.TAXA_ARRAY[x];
-			
-			System.out.println(taxa);
-			
-			File inFile = new File(mh.getLogNormalizedKrakenCounts(taxa));
-			File outFile = new File(mh.getLogNormalizedArffFromKraken(taxa));
-			
-			write(inFile, outFile, taxa);
+
+			for( int x=0; x < RunAllClassifiers.TAXA_ARRAY.length; x++)
+			{
+				writeArffFromLogNormalKrakenCounts(apd, RunAllClassifiers.TAXA_ARRAY[x]);
+			}
 		}
 	}
 }
