@@ -24,8 +24,8 @@ public class CirrhosisQin extends AbstractProjectDescription
 	public String getLogNormalizedKrakenCounts(String taxa) throws Exception
 	{
 		return ConfigReader.getMergedArffDir() + File.separator + "kraken" + File.separator + 
-						"crc_Zeller" 
-				+ File.separator + "colorectal_minikraken_merged_lognorm_" + taxa + ".txt";
+						"cirrhosis" 
+				+ File.separator + "cirrhosis_minikraken_merged_lognorm_" + taxa + ".txt";
 		
 	}
 
@@ -41,7 +41,7 @@ public class CirrhosisQin extends AbstractProjectDescription
 	public  HashSet<String> getPositiveClassifications()
 	{
 		HashSet<String> set = new HashSet<String>();
-		set.add("cancer");  set.add("CRC");
+		set.add("cirrhosis"); 
 		return set;
 	}
 	

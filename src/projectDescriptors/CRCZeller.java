@@ -24,7 +24,7 @@ public class CRCZeller extends AbstractProjectDescription
 	public String getLogNormalizedKrakenCounts(String taxa) throws Exception
 	{
 		return ConfigReader.getMergedArffDir() + File.separator + "kraken" + File.separator + 
-						"ibd_Metahit" + File.separator + "ibd_minikraken_merged_lognorm_" + taxa + ".txt";
+						"crc_Zeller" + File.separator + "colorectal_minikraken_merged_lognorm_" + taxa + ".txt";
 		
 	}
 	
@@ -32,8 +32,8 @@ public class CRCZeller extends AbstractProjectDescription
 	public  HashSet<String> getPositiveClassifications()
 	{
 		HashSet<String> set = new HashSet<String>();
-		set.add("ibd_ulcerative_colitis");
-		set.add("ibd_crohn_disease");
+		set.add("cancer");
+		set.add("CRC");
 		return set;
 	}
 	
