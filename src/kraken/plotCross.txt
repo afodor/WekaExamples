@@ -4,14 +4,13 @@
 	
 	
 	taxa <- c("domain","phylum", "class", "order", "family", "genus")
-	#taxa <- c("doman","phylum", "class", "order", "family", "genus", "species")
-	
+	taxa <- "species"
 	
 	for( t in taxa) 
 	{
-		par(mfrow=c(5,4))
+		par(mfrow=c(3,2))
 		normTests <- vector()
-		inFileName <- paste( "cross_", taxa, "krakenRandomForest.txt", sep="")
+		inFileName <- paste( "cross_", t, "krakenRandomForest.txt", sep="")
 		myT <- read.table(inFileName, sep="\t", header=TRUE)
 		
 		for(i in 3:ncol(myT))
