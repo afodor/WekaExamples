@@ -11,6 +11,7 @@ import java.util.List;
 
 import examples.TestClassify;
 import projectDescriptors.AbstractProjectDescription;
+import projectDescriptors.CRCZeller;
 import projectDescriptors.IbdMetaHit;
 import projectDescriptors.CirrhosisQin;
 import utils.ConfigReader;
@@ -62,6 +63,7 @@ public class RunAllClassifiers
 	{
 		List<AbstractProjectDescription> list = new ArrayList<AbstractProjectDescription>();
 		
+		list.add( new CRCZeller());
 		list.add( new CirrhosisQin());
 		list.add( new IbdMetaHit());
 		

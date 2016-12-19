@@ -11,7 +11,7 @@ import projectDescriptors.AbstractProjectDescription;
 
 public class WriteKrakenToArff
 {
-	private static int getNumSamples(File file) throws Exception
+	private static int getNumSamples(File file, AbstractProjectDescription apd) throws Exception
 	{
 		int count = 0;
 		
@@ -21,6 +21,10 @@ public class WriteKrakenToArff
 		
 		for( String s = reader.readLine(); s != null; s= reader.readLine())
 		{
+			String[] splits = s.split("\t");
+			String key = splits[1];
+			if( apd.getNegativeClassifications().contains(key) 
+						|| apd.getPositiveClassifications().contains(key))
 			count++;
 		}
 		
@@ -36,7 +40,7 @@ public class WriteKrakenToArff
 		File inFile = new File(apb.getLogNormalizedKrakenCounts(taxa));
 		System.out.println(inFile.getAbsolutePath());
 		File outFile = new File(apb.getLogNormalizedArffFromKraken(taxa));
-		int numSamples = getNumSamples(inFile);
+		int numSamples = getNumSamples(inFile, apb);
 		System.out.println("Got" + numSamples);
 		BufferedReader reader = new BufferedReader(new FileReader(inFile));
 		
@@ -72,7 +76,7 @@ public class WriteKrakenToArff
 			
 			
 			for( int y=0; y < splits.length; y++)
-			{
+			{ 
 				if( y>=2 )
 					writer.write( splits[y] + ",");
 			}
@@ -81,7 +85,7 @@ public class WriteKrakenToArff
 				writer.write("false\n");
 			else if( apb.getPositiveClassifications().contains(splits[1]))
 				writer.write("true\n");
-			else throw new Exception("Parsing error " + splits[1]);
+			else System.out.println("Skipping " + splits[1]);
 		}
 		
 		writer.flush();  writer.close();

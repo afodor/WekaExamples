@@ -348,6 +348,9 @@ public class TestClassify
 				ev.crossValidateModel(classifier, data, 10, random);
 				resultsList.add(ev.areaUnderROC(0));
 				
+				System.out.println(inFile.getAbsolutePath()+ " " + classifierName + " " 
+			 	+ scramble + " " + ev.areaUnderROC(0));
+				
 				if( tvp != null)
 					addROC(ev,tvp, plotColor);
 			}
@@ -370,7 +373,11 @@ public class TestClassify
 
 		final List<Double> areaUnderCurve = Collections.synchronizedList(new ArrayList<Double>());
 		
-		int numProcessors = Runtime.getRuntime().availableProcessors() + 1;
+		int numProcessors = Runtime.getRuntime().availableProcessors() - 1;
+		
+		if( numProcessors < 1)
+			numProcessors = 1;
+		
 		Semaphore s = new Semaphore(numProcessors);
 		
 		for( int x=0; x< numPermutations; x++)
