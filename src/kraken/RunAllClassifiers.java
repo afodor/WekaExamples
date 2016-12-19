@@ -99,7 +99,7 @@ public class RunAllClassifiers
 				
 				resultsMap.put(oneR, 
 				TestClassify.plotRocUsingMultithread(
-					inArff, numPermutations, false, tvp, new OneR().getClass().getName(), 
+					inArff, numPermutations, true, tvp, new OneR().getClass().getName(), 
 						Color.GREEN));
 				
 				resultsMap.put(scrambled, 
