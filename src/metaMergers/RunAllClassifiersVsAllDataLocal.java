@@ -34,7 +34,6 @@ import weka.classifiers.rules.OneR;
 import weka.classifiers.trees.DecisionStump;
 import weka.classifiers.trees.HoeffdingTree;
 import weka.classifiers.trees.J48;
-import weka.classifiers.trees.LMT;
 import weka.classifiers.trees.RandomForest;
 import weka.classifiers.trees.lmt.LogisticBase;
 

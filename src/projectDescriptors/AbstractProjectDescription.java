@@ -16,4 +16,16 @@ public abstract class AbstractProjectDescription
 		baseFile = baseFile.substring(0, baseFile.lastIndexOf(".arff") );
 		return baseFile + "allMerged.arff";
 	}
+	
+	public String getLogNormalizedKrakenCounts(String taxa) throws Exception
+	{
+		return null;
+	}
+	
+	public String getLogNormalizedArffFromKraken(String taxa) throws Exception
+	{
+		String baseFile = getLogNormalizedKrakenCounts(taxa);
+		baseFile = baseFile.substring(0, baseFile.lastIndexOf(".txt") );
+		return baseFile + "krakenLogNorm.arff";
+	}
 }
