@@ -10,11 +10,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import examples.TestClassify;
-import parsers.NewRDPParserFileLine;
 import projectDescriptors.AbstractProjectDescription;
+import projectDescriptors.IbdMetaHit;
 import utils.ConfigReader;
 import weka.classifiers.rules.OneR;
 import weka.classifiers.trees.RandomForest;
+import weka.gui.visualize.ThresholdVisualizePanel;
 
 public class RunAllClassifiers
 {
@@ -56,24 +57,32 @@ public class RunAllClassifiers
 		
 	}
 	
+	public static List<AbstractProjectDescription> getAllProjects() throws Exception
+	{
+		List<AbstractProjectDescription> list = new ArrayList<AbstractProjectDescription>();
+		
+		list.add( new IbdMetaHit());
+		
+		return list;
+	}
+	
 	public static void main(String[] args) throws Exception
 	{
-		/*
 		int numPermutations = 50;
-		List<AbstractProjectDescription> projects = BringIntoOneNameSpace.getAllProjects();
+		List<AbstractProjectDescription> projects = getAllProjects();
 		
-		for( int x=1 ; x < NewRDPParserFileLine.TAXA_ARRAY.length; x++)
+		for( int x=1 ; x < TAXA_ARRAY.length; x++)
 		{
 
 			HashMap<String, List<Double>> resultsMap = new LinkedHashMap<String,List<Double>>();
 			
-			String taxa = NewRDPParserFileLine.TAXA_ARRAY[x];
+			String taxa = TAXA_ARRAY[x];
 			for( AbstractProjectDescription apd : projects)
 			{
-				File inArff= new File(apd.getArffMergedFileFromRDP(taxa));
+				File inArff= new File(apd.getLogNormalizedArffFromKraken(taxa));
 
-				//ThresholdVisualizePanel tvp = TestClassify.getVisPanel(
-					//apd.getProjectName() + " " + taxa	);
+				ThresholdVisualizePanel tvp = TestClassify.getVisPanel(
+					apd.getProjectName() + " " + taxa	);
 				
 				String unScrambled = apd.getProjectName();
 				String scrambled= apd.getProjectName() + "_" +"_scrambled";
@@ -85,23 +94,22 @@ public class RunAllClassifiers
 				
 				resultsMap.put(unScrambled, 
 				TestClassify.plotRocUsingMultithread(
-					inArff, numPermutations, false, null, new RandomForest().getClass().getName(), 
+					inArff, numPermutations, false, tvp, new RandomForest().getClass().getName(), 
 						Color.BLACK));
 				
 				resultsMap.put(oneR, 
 				TestClassify.plotRocUsingMultithread(
-					inArff, numPermutations, false, null, new OneR().getClass().getName(), 
-						Color.BLACK));
+					inArff, numPermutations, false, tvp, new OneR().getClass().getName(), 
+						Color.GREEN));
 				
 				resultsMap.put(scrambled, 
 						TestClassify.plotRocUsingMultithread(
-							inArff, numPermutations, true, null, new RandomForest().getClass().getName(), 
+							inArff, numPermutations, true, tvp, new RandomForest().getClass().getName(), 
 								Color.RED));
 			}	
 			
 			writeResults(taxa, resultsMap);
 		}
-		*/
 		
 	}	
 }
