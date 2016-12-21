@@ -55,9 +55,14 @@ public class WriteKrakenToArff
 		for( int y=0; y < topSplits.length; y++)
 		{
 			if( y >= 2)
-			writer.write("@attribute " + 
-					topSplits[y].replaceAll(" ", "_").replaceAll("shannonEntropy", "shannonDiversity") 
-							+ " numeric\n");
+			{
+				String attribute = topSplits[y].replaceAll(" ", "_").
+						replaceAll("shannonEntropy", "shannonDiversity").replaceAll(",", "_");
+
+				
+				writer.write("@attribute " + attribute + " numeric\n");
+
+			}
 		}
 		
 		writer.write("@attribute isCase { true, false }\n");

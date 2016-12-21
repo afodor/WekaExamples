@@ -100,7 +100,7 @@ public class BringIntoOneNameSpaceForKraken
 	private static String getNewLine(String oldLine, HashMap<Integer, String> flipMap,
 						HashMap<String, Integer> newPositionMap) throws Exception
 	{
-		System.out.println(oldLine);
+		//System.out.println(oldLine);
 		double[] vals = new double[newPositionMap.size()];
 		
 		String[] splits = oldLine.split(",");
