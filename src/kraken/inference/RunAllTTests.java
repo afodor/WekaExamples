@@ -68,7 +68,7 @@ public class RunAllTTests
 		writer.flush();  writer.close();
 	}
 	
-	private static List<TTestResultsHolder> runTTests(HashMap<String, CaseControlHolder> map)  
+	public static List<TTestResultsHolder> runTTests(HashMap<String, CaseControlHolder> map)  
 	{
 		List<TTestResultsHolder> list = new ArrayList<TTestResultsHolder>();
 		
@@ -99,7 +99,7 @@ public class RunAllTTests
 		return list;
 	}
 	
-	private static class TTestResultsHolder implements Comparable<TTestResultsHolder>
+	static class TTestResultsHolder implements Comparable<TTestResultsHolder>
 	{
 		final String taxaName;
 		double pValue = 1;
