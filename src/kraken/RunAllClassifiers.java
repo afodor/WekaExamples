@@ -66,9 +66,9 @@ public class RunAllClassifiers
 		
 		list.add(new Adenomas2015ProjectDescriptor());
 		
-		//list.add( new CRCZeller());
-		//list.add( new CirrhosisQin());
-		//list.add( new IbdMetaHit());
+		list.add( new CRCZeller());
+		list.add( new CirrhosisQin());
+		list.add( new IbdMetaHit());
 		
 		
 		return list;
@@ -79,7 +79,7 @@ public class RunAllClassifiers
 		int numPermutations = 50;
 		List<AbstractProjectDescription> projects = getAllProjects();
 		
-		for( int x=0; x < TAXA_ARRAY.length; x++)
+		for( int x=TAXA_ARRAY.length-1; x >=0 ; x++)
 		{
 
 			HashMap<String, List<Double>> resultsMap = new LinkedHashMap<String,List<Double>>();
