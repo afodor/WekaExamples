@@ -18,7 +18,7 @@ import projectDescriptors.AbstractProjectDescription;
 import utils.ConfigReader;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
-import weka.classifiers.trees.RandomForest;
+import weka.classifiers.rules.OneR;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.gui.visualize.ThresholdVisualizePanel;
@@ -52,22 +52,23 @@ public class RunCrossClassifiers
 						
 						File trainFile =new File(xProject.getLogNormalizedArffFromKrakenMergedNamedspace(taxa));
 						File testFile = new File(yProject.getLogNormalizedArffFromKrakenMergedNamedspace(taxa));
-						String classifierName = new RandomForest().getClass().getName();
+						String classifierName = new OneR().getClass().getName();
 						
 						results.addAll(getPercentCorrect(trainFile, testFile, 1, false, tvp, classifierName, Color.RED));
 						results.addAll(getPercentCorrect(trainFile, testFile, 2000, true, tvp, classifierName, Color.BLACK));
-						writeResults(resultsMap, taxa);
+						writeResults(resultsMap, taxa, classifierName);
 					}
 		}
 		
 	}
 	
-	private static void writeResults( HashMap<String, List<Double>> resultsMap , String level )
+	private static void writeResults( HashMap<String, List<Double>> resultsMap , String level,
+			String classifierName)
 		throws Exception
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
 			ConfigReader.getMergedArffDir() 
-				+ File.separator + "cross_" + level + "krakenRandomForest.txt"	)));
+				+ File.separator + "cross_" + level + "kraken_" +classifierName+ ".txt"	)));
 		
 		writer.write( "count\tisScrambled"  );
 		
