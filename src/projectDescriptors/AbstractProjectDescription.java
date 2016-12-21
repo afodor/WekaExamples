@@ -1,6 +1,9 @@
 package projectDescriptors;
 
+import java.io.File;
 import java.util.HashSet;
+
+import utils.ConfigReader;
 
 public abstract class AbstractProjectDescription
 {
@@ -17,6 +20,13 @@ public abstract class AbstractProjectDescription
 		String baseFile = getArffIndiviudalFileFromRDP(taxa);
 		baseFile = baseFile.substring(0, baseFile.lastIndexOf(".arff") );
 		return baseFile + "allMerged.arff";
+	}
+	
+	public String getTTestResultsFilePath(String taxa) throws Exception
+	{
+		return ConfigReader.getMergedArffDir() + File.separator + 
+					"ttests" + File.separator + this.getProjectName() + "_" + taxa 
+					+ "_ttests.txt";
 	}
 	
 	public String getLogNormalizedKrakenCounts(String taxa) throws Exception

@@ -1,7 +1,10 @@
 package kraken.inference;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -10,6 +13,7 @@ import java.util.List;
 
 import kraken.RunAllClassifiers;
 import projectDescriptors.AbstractProjectDescription;
+import utils.Avevar;
 import utils.StatisticReturnObject;
 import utils.TTest;
 
@@ -31,9 +35,37 @@ public class RunAllTTests
 		//for( String s : map.keySet())
 			//System.out.println(s + " " + map.get(s).caseVals.size() + " " +map.get(s).controlVals.size());
 		
-		List<TTestResultsHolder> ttest = runTTests(map);
-		System.out.println(ttest.size());
+		List<TTestResultsHolder> ttests = runTTests(map);
 		
+		writeResults(apd, taxa, ttests);
+		
+	}
+	
+	private static void writeResults( AbstractProjectDescription apd, String taxa, 
+			List<TTestResultsHolder> list) throws Exception
+	{
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
+				apd.getTTestResultsFilePath(taxa)
+				)));
+		
+		writer.write("taxa\tpValue\tfdrPValue\ttValue\ttTestFailed\taverageCase\taverageControl\tcaseVals\tcontrolVals\n");
+		
+		for( int x=0; x < list.size(); x++)
+		{
+			TTestResultsHolder tTest = list.get(x);
+			
+			writer.write(tTest.taxaName + "\t");
+			writer.write(tTest.pValue + "\t");
+			writer.write( ( tTest.pValue * list.size() / (x+1) ) + "\t");
+			writer.write( tTest.tValue + "\t");
+			writer.write(tTest.threwException + "\t");
+			writer.write( new Avevar(tTest.cch.caseVals).getAve() + "\t");
+			writer.write( new Avevar(tTest.cch.controlVals).getAve() + "\t");
+			writer.write( tTest.cch.caseVals+ "\t");
+			writer.write( tTest.cch.controlVals+ "\n");
+		}
+		
+		writer.flush();  writer.close();
 	}
 	
 	private static List<TTestResultsHolder> runTTests(HashMap<String, CaseControlHolder> map)  
