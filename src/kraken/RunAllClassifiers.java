@@ -79,7 +79,7 @@ public class RunAllClassifiers
 		int numPermutations = 50;
 		List<AbstractProjectDescription> projects = getAllProjects();
 		
-		for( int x=TAXA_ARRAY.length-1; x >=0 ; x++)
+		for( int x=TAXA_ARRAY.length-1; x >=0 ; x--)
 		{
 
 			HashMap<String, List<Double>> resultsMap = new LinkedHashMap<String,List<Double>>();
