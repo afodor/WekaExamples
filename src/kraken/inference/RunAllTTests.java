@@ -59,8 +59,8 @@ public class RunAllTTests
 			writer.write( ( tTest.pValue * list.size() / (x+1) ) + "\t");
 			writer.write( tTest.tValue + "\t");
 			writer.write(tTest.threwException + "\t");
-			writer.write( new Avevar(tTest.cch.caseVals).getAve() + "\t");
-			writer.write( new Avevar(tTest.cch.controlVals).getAve() + "\t");
+			writer.write(tTest.caseAverage + "\t");
+			writer.write( tTest.controlAverage+ "\t");
 			writer.write( tTest.cch.caseVals+ "\t");
 			writer.write( tTest.cch.controlVals+ "\n");
 		}
@@ -78,11 +78,14 @@ public class RunAllTTests
 			list.add(t);
 			CaseControlHolder cch = map.get(s);
 			t.cch = cch;
+			t.caseAverage = new Avevar(cch.caseVals).getAve();
+			t.controlAverage = new Avevar(cch.controlVals).getAve();
 			
 			try
 			{
 				StatisticReturnObject sro = 
 						TTest.ttestFromNumberUnequalVariance(cch.controlVals,cch.caseVals );
+				
 				
 				t.pValue = sro.getPValue();
 				t.tValue = sro.getScore();
@@ -105,6 +108,8 @@ public class RunAllTTests
 		double pValue = 1;
 		boolean threwException = false;
 		double tValue;
+		double caseAverage;
+		double controlAverage;
 		CaseControlHolder cch;
 		
 		public TTestResultsHolder(String taxaName)
