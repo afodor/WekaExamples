@@ -16,6 +16,7 @@ import projectDescriptors.CRCZeller;
 import projectDescriptors.China2015_wgs;
 import projectDescriptors.IbdMetaHit;
 import projectDescriptors.CirrhosisQin;
+import projectDescriptors.Divitriculosis2015ProjectDescriptor;
 import utils.ConfigReader;
 import weka.classifiers.rules.OneR;
 import weka.classifiers.trees.RandomForest;
@@ -65,8 +66,8 @@ public class RunAllClassifiers
 	{
 		List<AbstractProjectDescription> list = new ArrayList<AbstractProjectDescription>();
 		
+		list.add(new Divitriculosis2015ProjectDescriptor());
 		list.add(new China2015_wgs());
-		
 		list.add(new Adenomas2015ProjectDescriptor());
 		list.add( new CRCZeller());
 		list.add( new CirrhosisQin());
