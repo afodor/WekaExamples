@@ -29,7 +29,7 @@ public class RunAllTTests
 	public static void runATTest(AbstractProjectDescription apd, String taxa) throws Exception
 	{
 		System.out.println(apd.getProjectName() + " " + taxa);
-		HashMap<String, CaseControlHolder> map = getCaseControlMap(apd, taxa);
+		HashMap<String, CaseControlHolder> map = getCaseControlMap(apd, taxa,true);
 		
 		//System.out.println(map.size());
 		//for( String s : map.keySet())
@@ -126,18 +126,18 @@ public class RunAllTTests
 	
 	public static class CaseControlHolder 
 	{
-		List<Double> caseVals = new ArrayList<Double>();
-		List<Double> controlVals = new ArrayList<Double>();
+		public List<Double> caseVals = new ArrayList<Double>();
+		public List<Double> controlVals = new ArrayList<Double>();
 	}
 	
 	public static HashMap<String, CaseControlHolder> getCaseControlMap( AbstractProjectDescription apd ,
-			String taxa)
+			String taxa, boolean useKraken)
 		throws Exception
 	{
 		HashMap<String, CaseControlHolder> map = new HashMap<String, CaseControlHolder>();
 		
 		BufferedReader reader = new BufferedReader(new FileReader(
-				apd.getLogNormalizedKrakenCounts(taxa)));
+			useKraken ?	apd.getLogNormalizedKrakenCounts(taxa) : apd.getLogNormalizedRDPCounts(taxa)));
 		
 		String[] topLine = reader.readLine().split("\t");
 		

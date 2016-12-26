@@ -44,7 +44,7 @@ public class AllTTestsPivotedByTaxa
 		
 		for(AbstractProjectDescription apd : projects)
 		{
-			HashMap<String, CaseControlHolder> ccMap = RunAllTTests.getCaseControlMap(apd, taxa);
+			HashMap<String, CaseControlHolder> ccMap = RunAllTTests.getCaseControlMap(apd, taxa,true);
 			List<TTestResultsHolder> ttests = RunAllTTests.runTTests(ccMap);	
 			HashMap<String, TTestResultsHolder> innerMap = new HashMap<String, TTestResultsHolder>();
 			map.put(apd, innerMap);
