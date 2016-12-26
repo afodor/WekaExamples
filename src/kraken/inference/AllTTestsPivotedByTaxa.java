@@ -25,39 +25,54 @@ public class AllTTestsPivotedByTaxa
 		{
 			String taxa = RunAllClassifiers.TAXA_ARRAY[x];
 			
-			HashMap<AbstractProjectDescription, HashMap<String,TTestResultsHolder>> 
+			HashMap<String, HashMap<String,TTestResultsHolder>> 
 				map = getAllTTests(projects, taxa);
 			
 			writePivot(map, projects, taxa);
 		}
 	}
 	
-	// ok for AAbstractProjectDescription to be a key in the map
-	// because we keep default .equals and .hashMap methods
-	// so each key in the map is unique
-	// inner map is with taxa as key
-	private static HashMap<AbstractProjectDescription, HashMap<String,TTestResultsHolder>> 
+	// outer string is projectID@method
+	// inner string is taxa
+	private static HashMap<String, HashMap<String,TTestResultsHolder>> 
 		getAllTTests(List<AbstractProjectDescription> projects, String taxa) throws Exception
 	{
-		HashMap<AbstractProjectDescription, HashMap<String,TTestResultsHolder>>   map = 
-				new HashMap<AbstractProjectDescription, HashMap<String,TTestResultsHolder>>();
+		HashMap<String, HashMap<String,TTestResultsHolder>>   map = 
+				new HashMap<String, HashMap<String,TTestResultsHolder>>();
 		
 		for(AbstractProjectDescription apd : projects)
 		{
-			HashMap<String, CaseControlHolder> ccMap = RunAllTTests.getCaseControlMap(apd, taxa,true);
-			List<TTestResultsHolder> ttests = RunAllTTests.runTTests(ccMap);	
-			HashMap<String, TTestResultsHolder> innerMap = new HashMap<String, TTestResultsHolder>();
-			map.put(apd, innerMap);
+			if( apd.getLogNormalizedKrakenCounts(taxa) != null 
+				&& new File(apd.getLogNormalizedKrakenCounts(taxa)).exists()	)
+				addOne(apd, true, taxa, map);
 			
-			for(TTestResultsHolder ttest : ttests)
-				innerMap.put(ttest.taxaName, ttest);
+			if( apd.getLogNormalizedRDPCounts(taxa) != null 
+					&& new File(apd.getLogNormalizedRDPCounts(taxa)).exists() )
+				addOne(apd, false, taxa, map);
 		}
 		
 		return map;
 	}
 	
+	private static void addOne(AbstractProjectDescription apd, boolean useKraken, String taxa,
+			HashMap<String, HashMap<String,TTestResultsHolder>>   map ) throws Exception
+	{
+		String key = apd.getProjectName() + "@" + (useKraken ? "kraken" : "rdp");
+		
+		if(map.containsKey(key))
+			throw new Exception("Duplicate " + key);
+		
+		HashMap<String, CaseControlHolder> ccMap = RunAllTTests.getCaseControlMap(apd, taxa,useKraken);
+		List<TTestResultsHolder> ttests = RunAllTTests.runTTests(ccMap);	
+		HashMap<String, TTestResultsHolder> innerMap = new HashMap<String, TTestResultsHolder>();
+		map.put(key, innerMap);
+		
+		for(TTestResultsHolder ttest : ttests)
+			innerMap.put(ttest.taxaName, ttest);
+	}
+	
 	private static List<String> getAllTaxaNames(
-			 HashMap<AbstractProjectDescription, HashMap<String,TTestResultsHolder>> map) throws Exception
+			 HashMap<String, HashMap<String,TTestResultsHolder>> map) throws Exception
 	{
 		HashSet<String> set = new HashSet<String>();
 		
@@ -70,8 +85,7 @@ public class AllTTestsPivotedByTaxa
 		return list;
 	}
 	
-	private static void writePivot(HashMap<AbstractProjectDescription, 
-					HashMap<String,TTestResultsHolder>> map,
+	private static void writePivot(HashMap<String, HashMap<String,TTestResultsHolder>> map,
 			List<AbstractProjectDescription> projects, String taxa) 
 				throws Exception
 	{
@@ -83,8 +97,11 @@ public class AllTTestsPivotedByTaxa
 		
 		writer.write("taxa");
 		
-		for( int x=0; x < projects.size(); x++)
-					writer.write("\t" + projects.get(x).getProjectName());
+		List<String> keys = new ArrayList<String>(map.keySet());
+		Collections.sort(keys);
+		
+		for( String s : keys)
+			writer.write("\t" + s);
 		
 		writer.write("\n");
 		
@@ -92,9 +109,9 @@ public class AllTTestsPivotedByTaxa
 		{
 			writer.write(s);
 			
-			for( int x=0; x < projects.size(); x++)
+			for( String key : keys)
 			{
-				HashMap<String,TTestResultsHolder> innerMap = map.get(projects.get(x));
+				HashMap<String,TTestResultsHolder> innerMap = map.get(key);
 				TTestResultsHolder t = innerMap.get(s);
 				
 				if( t== null)
