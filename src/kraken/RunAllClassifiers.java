@@ -13,8 +13,10 @@ import examples.TestClassify;
 import projectDescriptors.AbstractProjectDescription;
 import projectDescriptors.Adenomas2015ProjectDescriptor;
 import projectDescriptors.CRCZeller;
+import projectDescriptors.China2015_wgs;
 import projectDescriptors.IbdMetaHit;
 import projectDescriptors.CirrhosisQin;
+import projectDescriptors.Divitriculosis2015ProjectDescriptor;
 import utils.ConfigReader;
 import weka.classifiers.rules.OneR;
 import weka.classifiers.trees.RandomForest;
@@ -64,19 +66,19 @@ public class RunAllClassifiers
 	{
 		List<AbstractProjectDescription> list = new ArrayList<AbstractProjectDescription>();
 		
+		list.add(new Divitriculosis2015ProjectDescriptor());
+		list.add(new China2015_wgs());
 		list.add(new Adenomas2015ProjectDescriptor());
-		
 		list.add( new CRCZeller());
 		list.add( new CirrhosisQin());
 		list.add( new IbdMetaHit());
-		
 		
 		return list;
 	}
 	
 	public static void main(String[] args) throws Exception
 	{
-		int numPermutations = 50;
+		int numPermutations = 10;
 		List<AbstractProjectDescription> projects = getAllProjects();
 		
 		for( int x=TAXA_ARRAY.length-1; x >=0 ; x--)

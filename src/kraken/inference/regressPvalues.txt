@@ -1,0 +1,10 @@
+rm(list=ls())
+
+setwd("C:\\ArffMerged")
+
+myT <- read.table("allTTestsPivoted_genus.txt", sep="\t", header=TRUE)
+
+summary(lm( myT$China2015_wgs ~ myT$CRCZeller ))
+
+library("Kendall")
+Kendall(myT$China2015_wgs , myT$CRCZeller )

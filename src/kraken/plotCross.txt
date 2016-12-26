@@ -7,9 +7,9 @@
 	
 	for( t in taxa) 
 	{
-		par(mfrow=c(3,2))
+		par(mfrow=c(5,4))
 		normTests <- vector()
-		inFileName <- paste( "cross_", t, "kraken_weka.classifiers.rules.OneR.txt", sep="")
+		inFileName <- paste("cross_",t,"kraken_weka.classifiers.trees.RandomForest.txt", sep="")
 		myT <- read.table(inFileName, sep="\t", header=TRUE)
 		
 		for(i in 3:ncol(myT))
