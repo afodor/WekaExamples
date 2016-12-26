@@ -13,6 +13,8 @@ import examples.TestClassify;
 import projectDescriptors.AbstractProjectDescription;
 import projectDescriptors.Adenomas2015ProjectDescriptor;
 import projectDescriptors.CRCZeller;
+import projectDescriptors.China2015_Timepoint1;
+import projectDescriptors.China2015_Timepoint2;
 import projectDescriptors.China2015_wgs;
 import projectDescriptors.IbdMetaHit;
 import projectDescriptors.CirrhosisQin;
@@ -65,6 +67,9 @@ public class RunAllClassifiers
 	public static List<AbstractProjectDescription> getAllProjects() throws Exception
 	{
 		List<AbstractProjectDescription> list = new ArrayList<AbstractProjectDescription>();
+		
+		list.add(new China2015_Timepoint1());
+		list.add(new China2015_Timepoint2());
 		
 		list.add(new Divitriculosis2015ProjectDescriptor());
 		list.add(new China2015_wgs());
