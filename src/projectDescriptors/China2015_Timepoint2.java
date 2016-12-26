@@ -22,6 +22,14 @@ public class China2015_Timepoint2 extends AbstractProjectDescription
 	}
 	
 	@Override
+	public String getLogNormalizedRDPCounts(String taxa) throws Exception
+	{
+		return ConfigReader.getMergedArffDir() + File.separator +
+				"China2015" + File.separator +  "rdp" + File.separator + 
+				"China_2015_kraken_" + taxa +  "loggedWithMetadataRDP_second_B.txt";
+	}
+	
+	@Override
 	public String getLogNormalizedKrakenCounts(String taxa) throws Exception
 	{
 		return ConfigReader.getMergedArffDir() + File.separator +
