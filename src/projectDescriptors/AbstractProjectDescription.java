@@ -34,6 +34,11 @@ public abstract class AbstractProjectDescription
 		return null;
 	}
 	
+	public String getLogNormalizedRDPCounts(String taxa) throws Exception
+	{
+		return null;
+	}
+	
 	public String getLogNormalizedArffFromKraken(String taxa) throws Exception
 	{
 		String baseFile = getLogNormalizedKrakenCounts(taxa); 
