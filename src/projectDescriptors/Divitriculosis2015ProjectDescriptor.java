@@ -38,6 +38,14 @@ public class Divitriculosis2015ProjectDescriptor extends AbstractProjectDescript
 	}
 	
 	@Override
+	public String getLogNormalizedClosedRefQiimeCounts(String taxa) throws Exception
+	{
+		return ConfigReader.getMergedArffDir() + File.separator + "Diverticulosis2015" + 
+				File.separator + "qiimeClosed" + File.separator + 
+				"diverticulosis_closed_" + taxa + "_AsColumnsLogNormalWithMetadata.txt";
+	}
+	
+	@Override
 	public HashSet<String> getPositiveClassifications()
 	{
 		HashSet<String> set = new HashSet<String>();
