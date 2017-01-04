@@ -23,13 +23,32 @@ public class RunAllTTests
 	{
 		for( int x=0; x < RunAllClassifiers.TAXA_ARRAY.length; x++)
 			for( AbstractProjectDescription apd : RunAllClassifiers.getAllProjects() )
-				runATTest(apd, RunAllClassifiers.TAXA_ARRAY[x]);
+			{
+				String taxa = RunAllClassifiers.TAXA_ARRAY[x];
+				runATTest(apd, taxa, 
+						apd.getLogNormalizedKrakenCounts(taxa), AbstractProjectDescription.KRAKEN);
+				
+				runATTest(apd, taxa, 
+						apd.getLogNormalizedRDPCounts(taxa), AbstractProjectDescription.RDP);
+			}
 	}
 	
-	public static void runATTest(AbstractProjectDescription apd, String taxa) throws Exception
+	public static void runATTest(AbstractProjectDescription apd, String taxa,
+			String filepath, String classificationScheme) throws Exception
 	{
+		if( filepath == null)
+			return;
+		
+		File inFile = new File(filepath);
+		
+		if( !inFile.exists())
+		{
+			System.out.println("Could not find " + inFile.getAbsolutePath() + " skipping ");
+			return;
+		}
+		
 		System.out.println(apd.getProjectName() + " " + taxa);
-		HashMap<String, CaseControlHolder> map = getCaseControlMap(apd, taxa,true);
+		HashMap<String, CaseControlHolder> map = getCaseControlMap(apd, taxa,filepath);
 		
 		//System.out.println(map.size());
 		//for( String s : map.keySet())
@@ -37,15 +56,15 @@ public class RunAllTTests
 		
 		List<TTestResultsHolder> ttests = runTTests(map);
 		
-		writeResults(apd, taxa, ttests);
+		writeResults(apd, taxa, ttests, classificationScheme);
 		
 	}
 	
 	private static void writeResults( AbstractProjectDescription apd, String taxa, 
-			List<TTestResultsHolder> list) throws Exception
+			List<TTestResultsHolder> list, String classificationScheme) throws Exception
 	{
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
-				apd.getTTestResultsFilePath(taxa)
+				apd.getTTestResultsFilePath(taxa, classificationScheme)
 				)));
 		
 		writer.write("taxa\tpValue\tfdrPValue\ttValue\ttTestFailed\taverageCase\taverageControl\tcaseVals\tcontrolVals\n");
@@ -131,13 +150,12 @@ public class RunAllTTests
 	}
 	
 	public static HashMap<String, CaseControlHolder> getCaseControlMap( AbstractProjectDescription apd ,
-			String taxa, boolean useKraken)
+			String taxa, String logNormalizedFilePath)
 		throws Exception
 	{
 		HashMap<String, CaseControlHolder> map = new HashMap<String, CaseControlHolder>();
 		
-		BufferedReader reader = new BufferedReader(new FileReader(
-			useKraken ?	apd.getLogNormalizedKrakenCounts(taxa) : apd.getLogNormalizedRDPCounts(taxa)));
+		BufferedReader reader = new BufferedReader(new FileReader(logNormalizedFilePath));
 		
 		String[] topLine = reader.readLine().split("\t");
 		

@@ -42,27 +42,34 @@ public class AllTTestsPivotedByTaxa
 		
 		for(AbstractProjectDescription apd : projects)
 		{
-			if( apd.getLogNormalizedKrakenCounts(taxa) != null 
-				&& new File(apd.getLogNormalizedKrakenCounts(taxa)).exists()	)
-				addOne(apd, true, taxa, map);
-			
-			if( apd.getLogNormalizedRDPCounts(taxa) != null 
-					&& new File(apd.getLogNormalizedRDPCounts(taxa)).exists() )
-				addOne(apd, false, taxa, map);
+			addOne(apd, apd.getLogNormalizedKrakenCounts(taxa), taxa, map, AbstractProjectDescription.KRAKEN);
+			addOne(apd, apd.getLogNormalizedRDPCounts(taxa), taxa, map, AbstractProjectDescription.RDP);
 		}
 		
 		return map;
 	}
 	
-	private static void addOne(AbstractProjectDescription apd, boolean useKraken, String taxa,
-			HashMap<String, HashMap<String,TTestResultsHolder>>   map ) throws Exception
+	private static void addOne(AbstractProjectDescription apd, String filepath, String taxa,
+			HashMap<String, HashMap<String,TTestResultsHolder>>   map, 
+			String classificationScheme) throws Exception
 	{
-		String key = apd.getProjectName() + "@" + (useKraken ? "kraken" : "rdp");
+		String key = apd.getProjectName() + "@" + classificationScheme;
 		
 		if(map.containsKey(key))
 			throw new Exception("Duplicate " + key);
 		
-		HashMap<String, CaseControlHolder> ccMap = RunAllTTests.getCaseControlMap(apd, taxa,useKraken);
+		if( filepath == null)
+			return;
+		
+		File inFile = new File(filepath);
+		
+		if( !inFile.exists())
+		{
+			System.out.println("Could not find " + inFile.getAbsolutePath() + " skipping ");
+			return;
+		}
+		
+		HashMap<String, CaseControlHolder> ccMap = RunAllTTests.getCaseControlMap(apd, taxa, filepath);
 		List<TTestResultsHolder> ttests = RunAllTTests.runTTests(ccMap);	
 		HashMap<String, TTestResultsHolder> innerMap = new HashMap<String, TTestResultsHolder>();
 		map.put(key, innerMap);

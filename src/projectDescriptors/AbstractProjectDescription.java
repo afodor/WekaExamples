@@ -7,6 +7,9 @@ import utils.ConfigReader;
 
 public abstract class AbstractProjectDescription
 {
+	public static final String KRAKEN = "KRAKEN";
+	public static final String RDP = "RDP";
+	
 	abstract public String getProjectName();
 	
 	// last attribute should be @attribute isCase { true, false }
@@ -22,11 +25,11 @@ public abstract class AbstractProjectDescription
 		return baseFile + "allMerged.arff";
 	}
 	
-	public String getTTestResultsFilePath(String taxa) throws Exception
+	public String getTTestResultsFilePath(String taxa, String classificationScheme) throws Exception
 	{
 		return ConfigReader.getMergedArffDir() + File.separator + 
 					"ttests" + File.separator + this.getProjectName() + "_" + taxa 
-					+ "_ttests.txt";
+					+ "_ttests_" + classificationScheme +  ".txt";
 	}
 	
 	public String getLogNormalizedKrakenCounts(String taxa) throws Exception
