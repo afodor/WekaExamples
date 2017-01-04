@@ -9,6 +9,7 @@ public abstract class AbstractProjectDescription
 {
 	public static final String KRAKEN = "KRAKEN";
 	public static final String RDP = "RDP";
+	public static final String QIIME_CLOSED = "QIIME_CLOSED";
 	
 	abstract public String getProjectName();
 	

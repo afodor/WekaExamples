@@ -44,6 +44,7 @@ public class AllTTestsPivotedByTaxa
 		{
 			addOne(apd, apd.getLogNormalizedKrakenCounts(taxa), taxa, map, AbstractProjectDescription.KRAKEN);
 			addOne(apd, apd.getLogNormalizedRDPCounts(taxa), taxa, map, AbstractProjectDescription.RDP);
+			addOne(apd, apd.getLogNormalizedClosedRefQiimeCounts(taxa), taxa, map, AbstractProjectDescription.QIIME_CLOSED);
 		}
 		
 		return map;
