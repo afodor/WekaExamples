@@ -7,4 +7,27 @@ myT <- read.table("allTTestsPivoted_genus.txt", sep="\t", header=TRUE)
 summary(lm( myT$China2015_wgs ~ myT$CRCZeller ))
 
 library("Kendall")
-Kendall(myT$China2015_wgs , myT$CRCZeller )
+Kendall(myT$China2015_wgs , myT$obesity )
+
+index <- 1
+namesI <- vector()
+namesJ <- vector()
+kendallP <- vector()
+kendallR <- vector()
+kedallRSquared <- vector()
+ncol <- dim(myT)[2]
+for( i in 2:ncol)
+{
+	start <- i+1
+	for ( j in start:ncol)
+		if ( j < ncol ) 
+		{
+			kendallP[index] <- Kendall(myT[,i] , myT[,j])$sl[1]
+			namesI[index] <- names(myT)[i]
+			namesJ[index] <- names(myT)[j]
+			r <- cor(myT[,i] ,  myT[,j] ,use = "complete.obs",method="kendall")
+			kedallRSquared[index] <- r * r
+			kendallR[index] <- r
+			index <- index + 1
+		}
+}
