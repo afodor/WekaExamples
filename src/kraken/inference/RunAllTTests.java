@@ -189,8 +189,8 @@ public class RunAllTTests
 					cch.caseVals.add(Double.parseDouble(splits[i]));
 				else if( apd.getNegativeClassifications().contains(splits[1]) )
 					cch.controlVals.add(Double.parseDouble(splits[i]));
-				else 
-					System.out.println("Skipping " + splits[1]);
+				//else 
+				//	System.out.println("Skipping " + splits[1]);
 				
 			}
 		}

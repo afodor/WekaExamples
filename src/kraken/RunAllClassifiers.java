@@ -17,6 +17,7 @@ import projectDescriptors.China2015_Timepoint1;
 import projectDescriptors.China2015_Timepoint2;
 import projectDescriptors.China2015_wgs;
 import projectDescriptors.IbdMetaHit;
+import projectDescriptors.Obesity;
 import projectDescriptors.CirrhosisQin;
 import projectDescriptors.Divitriculosis2015ProjectDescriptor;
 import utils.ConfigReader;
@@ -77,6 +78,7 @@ public class RunAllClassifiers
 		list.add( new CRCZeller());
 		list.add( new CirrhosisQin());
 		list.add( new IbdMetaHit());
+		list.add( new Obesity());
 		
 		return list;
 	}
