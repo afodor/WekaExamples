@@ -31,3 +31,10 @@ for( i in 2:ncol)
 			index <- index + 1
 		}
 }
+
+		
+dFrame <- data.frame( namesI,namesJ ,kendallP ,kendallR ,kedallRSquared)
+dFrame <- dFrame [order(dFrame$kendallP ),]
+dFrame$adjustedP<- p.adjust( dFrame$kendallP , method = "BH" )	
+write.table(dFrame, file=paste("pValuesAcrossTTests", "genus", ".txt",sep=""), sep="\t",row.names=FALSE)
+	
