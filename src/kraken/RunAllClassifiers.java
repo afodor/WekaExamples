@@ -19,6 +19,7 @@ import projectDescriptors.China2015_wgs;
 import projectDescriptors.IbdMetaHit;
 import projectDescriptors.Obesity;
 import projectDescriptors.T2D;
+import projectDescriptors.WT2D2;
 import projectDescriptors.CirrhosisQin;
 import projectDescriptors.Divitriculosis2015ProjectDescriptor;
 import utils.ConfigReader;
@@ -69,6 +70,8 @@ public class RunAllClassifiers
 	public static List<AbstractProjectDescription> getAllProjects() throws Exception
 	{
 		List<AbstractProjectDescription> list = new ArrayList<AbstractProjectDescription>();
+		list.add(new T2D());
+		list.add(new WT2D2());
 		
 		list.add(new China2015_Timepoint1());
 		list.add(new China2015_Timepoint2());
@@ -80,7 +83,7 @@ public class RunAllClassifiers
 		list.add( new CirrhosisQin());
 		list.add( new IbdMetaHit());
 		list.add( new Obesity());
-		list.add(new T2D());
+		
 		
 		return list;
 	}

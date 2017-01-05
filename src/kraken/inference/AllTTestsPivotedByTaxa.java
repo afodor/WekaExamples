@@ -115,7 +115,7 @@ public class AllTTestsPivotedByTaxa
 		
 		for(String s : names)
 		{
-			writer.write(s);
+			writer.write(s + "_");
 			
 			for( String key : keys)
 			{
