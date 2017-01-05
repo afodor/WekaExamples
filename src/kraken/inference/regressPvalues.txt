@@ -2,7 +2,13 @@ rm(list=ls())
 
 setwd("C:\\ArffMerged")
 
-myT <- read.table("allTTestsPivoted_genus.txt", sep="\t", header=TRUE)
+taxa <- c("phylum", "class", "order", "family", "genus", "species")
+
+for( t in taxa ) 
+{
+
+
+myT <- read.table(paste("allTTestsPivoted_",t,".txt",sep=""), sep="\t", header=TRUE)
 
 summary(lm( myT$China2015_wgs ~ myT$CRCZeller ))
 
@@ -43,5 +49,7 @@ dFrame <- data.frame( namesI,namesJ, lmP, kendallP ,kendallR ,kedallRSquared, pe
 dFrame <- dFrame [order(dFrame$lmP),]
 dFrame$adjustedP<- p.adjust( dFrame$lmP , method = "BH" )	
 dFrame$adjustedPKendall<- p.adjust( dFrame$kendallP , method = "BH" )	
-write.table(dFrame, file=paste("pValuesAcrossTTests", "genus", ".txt",sep=""), sep="\t",row.names=FALSE)
+write.table(dFrame, file=paste("pValuesAcrossTTests", t, ".txt",sep=""), sep="\t",row.names=FALSE)
+
+}
 	
