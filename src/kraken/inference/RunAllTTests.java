@@ -30,6 +30,10 @@ public class RunAllTTests
 				
 				runATTest(apd, taxa, 
 						apd.getLogNormalizedRDPCounts(taxa), AbstractProjectDescription.RDP);
+						
+				runATTest(apd, taxa, 
+								apd.getLogNormalizedClosedRefQiimeCounts(taxa), 
+								AbstractProjectDescription.QIIME_CLOSED);
 			}
 	}
 	
