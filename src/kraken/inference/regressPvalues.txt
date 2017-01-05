@@ -15,6 +15,8 @@ namesJ <- vector()
 kendallP <- vector()
 kendallR <- vector()
 kedallRSquared <- vector()
+pearsonR <- vector()
+pearsonRSquared <- vector()
 ncol <- dim(myT)[2]
 for( i in 2:ncol)
 {
@@ -25,15 +27,17 @@ for( i in 2:ncol)
 			kendallP[index] <- Kendall(myT[,i] , myT[,j])$sl[1]
 			namesI[index] <- names(myT)[i]
 			namesJ[index] <- names(myT)[j]
-			r <- cor(myT[,i] ,  myT[,j] ,use = "complete.obs",method="kendall")
+			r <- cor(myT[,i] ,  myT[,j] ,use = "pairwise.complete.obs",method="kendall")
 			kedallRSquared[index] <- r * r
 			kendallR[index] <- r
+			pearsonR[index] <- cor(myT[,i] ,  myT[,j] ,use = "pairwise.complete.obs",method="pearson")
+			pearsonRSquared[index] <- 	pearsonR[index] * pearsonR[index] 
 			index <- index + 1
 		}
 }
 
 		
-dFrame <- data.frame( namesI,namesJ ,kendallP ,kendallR ,kedallRSquared)
+dFrame <- data.frame( namesI,namesJ ,kendallP ,kendallR ,kedallRSquared, pearsonR, pearsonRSquared)
 dFrame <- dFrame [order(dFrame$kendallP ),]
 dFrame$adjustedP<- p.adjust( dFrame$kendallP , method = "BH" )	
 write.table(dFrame, file=paste("pValuesAcrossTTests", "genus", ".txt",sep=""), sep="\t",row.names=FALSE)
