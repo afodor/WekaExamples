@@ -17,10 +17,8 @@ import java.util.concurrent.atomic.AtomicLong;
 import examples.TestClassify;
 import projectDescriptors.AbstractProjectDescription;
 import projectDescriptors.CRCZeller;
-import projectDescriptors.China2015_wgs;
 import projectDescriptors.CirrhosisQin;
 import projectDescriptors.IbdMetaHit;
-import projectDescriptors.Obesity;
 import projectDescriptors.T2D;
 import projectDescriptors.WT2D2;
 import utils.ConfigReader;
@@ -42,12 +40,12 @@ public class LeaveOneExperimentOut
 		list.add(new WT2D2());
 		
 		//list.add(new Divitriculosis2015ProjectDescriptor());
-		list.add(new China2015_wgs());
+		//list.add(new China2015_wgs());
 		//list.add(new Adenomas2015ProjectDescriptor());
 		list.add( new CRCZeller());
 		list.add( new CirrhosisQin());
 		list.add( new IbdMetaHit());
-		list.add( new Obesity());
+		//list.add( new Obesity());
 		
 		return Collections.unmodifiableList(list);
 	}
@@ -81,7 +79,7 @@ public class LeaveOneExperimentOut
 	
 	public static void main(String[] args) throws Exception
 	{
-		for( int x=0; x < RunAllClassifiers.TAXA_ARRAY.length; x++)
+		for( int x=4; x < RunAllClassifiers.TAXA_ARRAY.length; x++)
 		{
 			String taxa = RunAllClassifiers.TAXA_ARRAY[x];
 			HashMap<String, List<Double>> resultsMap = new LinkedHashMap<String,List<Double>>();
