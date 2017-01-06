@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 
 import projectDescriptors.AbstractProjectDescription;
 import projectDescriptors.Adenomas2015ProjectDescriptor;
@@ -15,6 +16,8 @@ import projectDescriptors.IbdMetaHit;
 import projectDescriptors.Obesity;
 import projectDescriptors.T2D;
 import projectDescriptors.WT2D2;
+import weka.classifiers.Evaluation;
+import weka.classifiers.trees.RandomForest;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 
@@ -50,18 +53,17 @@ public class LeaveOneExperimentOut
 		
 		AbstractProjectDescription apb = firstIsTheOne ? list.get(1) : list.get(0);
 		
-		Instances data = DataSource.read( apb.getLogNormalizedArffFromKraken(taxa));
+		Instances data = DataSource.read( apb.getLogNormalizedArffFromKrakenMergedNamedspace(taxa));
 		skipSet.add(apb.getProjectName());
 		
 		for( AbstractProjectDescription apd : list )
 		{
 			if( ! skipSet.contains(one.getProjectName()))
 			{
-				File inFile = new File( apd.getLogNormalizedArffFromKraken(taxa));
-				data.addAll(DataSource.read(inFile.getAbsolutePath()));	
+				data.addAll(DataSource.read(apd.getLogNormalizedArffFromKrakenMergedNamedspace(taxa)));	
 			}
 		}
-		
+		data.setClassIndex(data.numAttributes() -1);
 		return data;
 	}
 	
@@ -73,7 +75,15 @@ public class LeaveOneExperimentOut
 			System.out.println(taxa);
 			for(AbstractProjectDescription abd : getAllExperiments())
 			{
-				Instances data = getAllButOne(getAllExperiments(), abd, taxa);
+				Instances allButOne= getAllButOne(getAllExperiments(), abd, taxa);
+				//Instances one = DataSource.read(abd.getLogNormalizedArffFromKraken(taxa));
+				
+				Evaluation ev = new Evaluation(allButOne);
+				RandomForest rf = new RandomForest();
+				
+				ev.crossValidateModel(rf, allButOne, 10, new Random());
+				
+				System.out.println( abd.getProjectName() + " " +  ev.areaUnderROC(0));
 			}
 		}
 	}
