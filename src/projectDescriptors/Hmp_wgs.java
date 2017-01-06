@@ -22,7 +22,7 @@ public class Hmp_wgs extends AbstractProjectDescription
 	@Override
 	public String getLogNormalizedKrakenCounts(String taxa) throws Exception
 	{
-		return ConfigReader.getMergedArffDir() + File.separator + 
+		return ConfigReader.getMergedArffDir() +
 				File.separator + "hmp" + File.separator + 
 				"hmp_minikraken_merged_lognorm_" + taxa +  ".txt";
 	}

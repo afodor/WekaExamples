@@ -72,12 +72,11 @@ public class LeaveOneExperimentOut
 		{
 			if( ! skipSet.contains(apd.getProjectName()))
 			{
-				System.out.println("\tadding " + apd.getProjectName());
 				data.addAll(DataSource.read(apd.getLogNormalizedArffFromKrakenMergedNamedspace(taxa)));
+				System.out.println("\tadded " + apd.getProjectName() + " " + data.size());
 			}
 		}
 		data.setClassIndex(data.numAttributes() -1);
-		//System.out.println("Got " + data.size());
 		return data;
 	}
 	

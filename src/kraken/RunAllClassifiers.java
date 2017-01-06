@@ -22,6 +22,7 @@ import projectDescriptors.T2D;
 import projectDescriptors.WT2D2;
 import projectDescriptors.CirrhosisQin;
 import projectDescriptors.Divitriculosis2015ProjectDescriptor;
+import projectDescriptors.Hmp_wgs;
 import utils.ConfigReader;
 import weka.classifiers.rules.OneR;
 import weka.classifiers.trees.RandomForest;
@@ -83,7 +84,7 @@ public class RunAllClassifiers
 		list.add( new CirrhosisQin());
 		list.add( new IbdMetaHit());
 		list.add( new Obesity());
-		
+		list.add(new Hmp_wgs());
 		
 		return list;
 	}
