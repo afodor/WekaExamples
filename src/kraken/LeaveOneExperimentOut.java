@@ -18,6 +18,7 @@ import examples.TestClassify;
 import projectDescriptors.AbstractProjectDescription;
 import projectDescriptors.CRCZeller;
 import projectDescriptors.CirrhosisQin;
+import projectDescriptors.Hmp_wgs;
 import projectDescriptors.IbdMetaHit;
 import projectDescriptors.T2D;
 import projectDescriptors.WT2D2;
@@ -45,6 +46,7 @@ public class LeaveOneExperimentOut
 		list.add( new CRCZeller());
 		list.add( new CirrhosisQin());
 		list.add( new IbdMetaHit());
+		list.add(new Hmp_wgs());
 		//list.add( new Obesity());
 		
 		return Collections.unmodifiableList(list);
@@ -68,12 +70,14 @@ public class LeaveOneExperimentOut
 		
 		for( AbstractProjectDescription apd : list )
 		{
-			if( ! skipSet.contains(one.getProjectName()))
+			if( ! skipSet.contains(apd.getProjectName()))
 			{
-				data.addAll(DataSource.read(apd.getLogNormalizedArffFromKrakenMergedNamedspace(taxa)));	
+				System.out.println("\tadding " + apd.getProjectName());
+				data.addAll(DataSource.read(apd.getLogNormalizedArffFromKrakenMergedNamedspace(taxa)));
 			}
 		}
 		data.setClassIndex(data.numAttributes() -1);
+		//System.out.println("Got " + data.size());
 		return data;
 	}
 	
@@ -87,6 +91,7 @@ public class LeaveOneExperimentOut
 			
 			
 			for(AbstractProjectDescription apd : getAllExperiments())
+				if( apd.getPositiveClassifications().size() > 0)
 			{
 				String key = apd.getProjectName() + "_" +taxa;
 				ThresholdVisualizePanel tvp = TestClassify.getVisPanel( key );
