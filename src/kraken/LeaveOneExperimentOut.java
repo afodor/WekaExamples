@@ -90,7 +90,7 @@ public class LeaveOneExperimentOut
 			
 			for(AbstractProjectDescription apd : getAllExperiments())
 			{
-				String key = apd.getProjectName() + "_" +"taxa";
+				String key = apd.getProjectName() + "_" +taxa;
 				ThresholdVisualizePanel tvp = TestClassify.getVisPanel( key );
 				System.out.println( taxa + " " +  key);
 				List<Double> results = new ArrayList<Double>();
