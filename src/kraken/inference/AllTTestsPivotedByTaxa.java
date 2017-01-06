@@ -126,7 +126,7 @@ public class AllTTestsPivotedByTaxa
 				
 				if( t== null)
 				{
-					buff.append("\t0");
+					buff.append("\t");
 				}
 				else
 				{

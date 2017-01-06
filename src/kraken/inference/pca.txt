@@ -1,4 +1,5 @@
 rm(list=ls())
+library("vegan")
 
 setwd("C:\\ArffMerged")
 
@@ -13,8 +14,12 @@ for( t in taxa )
 	myT <-t(myT)
 	myPCOA <- prcomp(myT)
 	
-	write.table(myPCOA$x, sep="\t", file=paste("pcoa_", t, ".txt",sep=""))
+	write.table(myPCOA$x, sep="\t", file=paste("pca_", t, ".txt",sep=""))
 	#write.table(myPCOA$CA$eig,file=paste("eigenValues_", t, ".txt", sep=""), sep="\t")
 
+	myPCOA <- capscale(myT~1,distance="bray")
+	
+	write.table(myPCOA$CA$u, sep="\t", file=paste("pcoa_bray", t, ".txt",sep=""))
+	write.table(myPCOA$CA$eig,file=paste("eigenValues_", t, ".txt", sep=""), sep="\t")
 }
 	
