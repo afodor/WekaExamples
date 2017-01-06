@@ -115,7 +115,9 @@ public class AllTTestsPivotedByTaxa
 		
 		for(String s : names)
 		{
-			writer.write(s + "_");
+			StringBuffer buff = new StringBuffer();
+			
+			buff.append(s + "_");
 			
 			for( String key : keys)
 			{
@@ -124,7 +126,7 @@ public class AllTTestsPivotedByTaxa
 				
 				if( t== null)
 				{
-					writer.write("\t");
+					buff.append("\t0");
 				}
 				else
 				{
@@ -133,11 +135,14 @@ public class AllTTestsPivotedByTaxa
 					if( t.caseAverage > t.controlAverage)
 						pValue = - pValue;
 					
-					writer.write("\t" + pValue);
+					buff.append("\t" + pValue);
+					
 				}
 			}
 
-			writer.write("\n");
+			buff.append("\n");
+			
+			writer.write(buff.toString());
 		}
 		
 		writer.flush();  writer.close();
