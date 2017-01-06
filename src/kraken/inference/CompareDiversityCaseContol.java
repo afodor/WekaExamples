@@ -19,9 +19,9 @@ public class CompareDiversityCaseContol
 			String taxa = RunAllClassifiers.TAXA_ARRAY[x];
 			System.out.println(taxa);
 			BufferedWriter writer =new BufferedWriter(new FileWriter(new File(
-				ConfigReader.getMergedArffDir() + File.separator + "diversity_" + taxa	)));
+				ConfigReader.getMergedArffDir() + File.separator + "diversity_" + taxa +".txt"	)));
 			
-			writer.write("projectName\tclassificationScheme\tsampleName\tcaseContol\tshannonDiversity\n");
+			writer.write("projectName\tclassificationScheme\tsampleName\tcaseContol\tshannonDiversity\tcompoundKey\n");
 			
 			for( AbstractProjectDescription apd : RunAllClassifiers.getAllProjects())
 			{
@@ -90,7 +90,8 @@ public class CompareDiversityCaseContol
 						writer.write(classification + "\t");
 						writer.write(splits[0] + "\t");
 						writer.write(caseControl + "\t");
-						writer.write(getShannonDiversity(splits) + "\n");
+						writer.write(getShannonDiversity(splits) + "\t");
+						writer.write(apd.getProjectName() + "_" + classification + "_" + caseControl + "\n");
 					}
 				}
 				
