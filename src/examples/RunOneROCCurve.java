@@ -12,7 +12,7 @@ public class RunOneROCCurve
 		Random random = new Random();
 		// this file is at https://github.com/afodor/afodor.github.io/blob/master/classes/prog2016/pivoted_genusLogNormalWithMetadata.arff
 		File inArff= new File(
-				"C:\\Users\\corei7\\git\\afodor.github.io\\classes\\prog2016\\pivoted_genusLogNormalWithMetadata.arff");
+				"C:\\temp\\pivoted_genusLogNormalWithMetadata.arff");
 				
 		ThresholdVisualizePanel tvp = TestClassify.getVisPanel(inArff.getName());
 				
