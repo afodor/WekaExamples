@@ -22,10 +22,11 @@ public class RunOneROCCurve
 		
 		int numPermutations = 20;
 		
+		// uncomment for multi-threaded
 		TestClassify.plotRocUsingMultithread(inArff, numPermutations, false, tvp, RandomForest.class.getName(), Color.BLACK);
-
 		TestClassify.plotRocUsingMultithread(inArff, numPermutations, true, tvp, RandomForest.class.getName(), Color.RED);
 		
+		// uncomment for single threaded
 		//TestClassify.plotROCForAnArff(inArff, numPermutations,random,false,tvp);	
 		//TestClassify.plotROCForAnArff(inArff, numPermutations,random,true,tvp);	
 		
